@@ -30,12 +30,13 @@ export function Card({
       transition={{ duration: 0.18 }}
       className={`
         rounded-2xl 
-        bg-[#161B22] 
-        border border-white/[0.06]
-        backdrop-blur-sm
+        bg-[var(--glass-bg)] 
+        backdrop-blur-[8px]
+        border border-[var(--glass-border)]
+        shadow-[0_4px_30px_rgba(0,0,0,0.1)]
         ${paddingMap[padding]}
-        ${hover ? 'hover:border-white/10 cursor-pointer' : ''}
-        transition-all duration-150
+        ${hover ? 'hover:bg-[var(--glass-shine)] hover:border-white/20 cursor-pointer' : ''}
+        transition-all duration-300 ease-out
         ${className}
       `}
       {...props}

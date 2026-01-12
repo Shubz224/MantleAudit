@@ -569,18 +569,6 @@ video {
 .top-16{
   top: 4rem;
 }
-.bottom-\[-300px\]{
-  bottom: -300px;
-}
-.right-\[-300px\]{
-  right: -300px;
-}
-.bottom-\[-10px\]{
-  bottom: -10px;
-}
-.right-\[-10px\]{
-  right: -10px;
-}
 .-z-10{
   z-index: -10;
 }
@@ -741,12 +729,6 @@ video {
 .h-screen{
   height: 100vh;
 }
-.h-\[700px\]{
-  height: 700px;
-}
-.h-\[800px\]{
-  height: 800px;
-}
 .min-h-screen{
   min-height: 100vh;
 }
@@ -806,12 +788,6 @@ video {
 }
 .w-full{
   width: 100%;
-}
-.w-\[700px\]{
-  width: 700px;
-}
-.w-\[800px\]{
-  width: 800px;
 }
 .min-w-\[700px\]{
   min-width: 700px;
@@ -1134,6 +1110,9 @@ video {
 .border-\[\#F59E0B\]\/20{
   border-color: rgb(245 158 11 / 0.2);
 }
+.border-\[var\(--glass-border\)\]{
+  border-color: var(--glass-border);
+}
 .border-current{
   border-color: currentColor;
 }
@@ -1161,13 +1140,6 @@ video {
 .bg-\[\#0B0E11\]{
   --tw-bg-opacity: 1;
   background-color: rgb(11 14 17 / var(--tw-bg-opacity, 1));
-}
-.bg-\[\#12161C\]{
-  --tw-bg-opacity: 1;
-  background-color: rgb(18 22 28 / var(--tw-bg-opacity, 1));
-}
-.bg-\[\#12161C\]\/80{
-  background-color: rgb(18 22 28 / 0.8);
 }
 .bg-\[\#161B22\]{
   --tw-bg-opacity: 1;
@@ -1217,6 +1189,9 @@ video {
 }
 .bg-\[\#F59E0B\]\/20{
   background-color: rgb(245 158 11 / 0.2);
+}
+.bg-\[var\(--glass-bg\)\]{
+  background-color: var(--glass-bg);
 }
 .bg-black{
   --tw-bg-opacity: 1;
@@ -1616,6 +1591,16 @@ video {
   --tw-shadow-colored: 0 0 5px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
+.shadow-\[0_4px_30px_rgba\(0\2c 0\2c 0\2c 0\.1\)\]{
+  --tw-shadow: 0 4px 30px rgba(0,0,0,0.1);
+  --tw-shadow-colored: 0 4px 30px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.shadow-\[4px_0_24px_rgba\(0\2c 0\2c 0\2c 0\.02\)\]{
+  --tw-shadow: 4px 0 24px rgba(0,0,0,0.02);
+  --tw-shadow-colored: 4px 0 24px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
 .shadow-lg{
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
@@ -1671,6 +1656,10 @@ video {
 }
 .filter{
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+.backdrop-blur-\[8px\]{
+  --tw-backdrop-blur: blur(8px);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 .backdrop-blur-md{
   --tw-backdrop-blur: blur(12px);
@@ -1750,11 +1739,17 @@ html {
 }
 
 body {
-    background: var(--bg-primary);
+    background:
+        radial-gradient(circle at 15% 50%, rgba(110, 214, 201, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(34, 197, 94, 0.05), transparent 25%),
+        var(--bg-primary);
+    /* Fallback/Base */
     color: var(--text-primary);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    position: relative;
 }
 
 /* Custom scrollbar - Subtle */
@@ -1902,8 +1897,8 @@ body {
   border-color: rgb(110 214 201 / 0.3);
 }
 
-.hover\:border-white\/10:hover{
-  border-color: rgb(255 255 255 / 0.1);
+.hover\:border-white\/20:hover{
+  border-color: rgb(255 255 255 / 0.2);
 }
 
 .hover\:bg-\[\#161B22\]\/50:hover{
@@ -1925,6 +1920,10 @@ body {
 
 .hover\:bg-\[\#6ED6C9\]\/20:hover{
   background-color: rgb(110 214 201 / 0.2);
+}
+
+.hover\:bg-\[var\(--glass-shine\)\]:hover{
+  background-color: var(--glass-shine);
 }
 
 .hover\:bg-white\/5:hover{
@@ -2097,7 +2096,17 @@ body {
     /* Backgrounds - Dark, professional */
     --bg-primary: #0B0E11;
     --bg-surface: #12161C;
-    --bg-card: #161B22;
+    --bg-card: rgba(22, 27, 34, 0.6);
+    /* More transparent for glass */
+
+    /* Liquid Glass Tokens */
+    --glass-bg: rgba(22, 27, 34, 0.15);
+    /* Much more transparent (was 0.45) */
+    --glass-border: rgba(255, 255, 255, 0.12);
+    /* Slightly clearer border */
+    --glass-shine: rgba(255, 255, 255, 0.08);
+    --glass-blur: 8px;
+    /* Less blurry (was 12px/16px in usage) */
 
     /* Accent - Mantle Mint (ONLY ONE) */
     --accent-mint: #6ED6C9;

@@ -4,7 +4,17 @@
     /* Backgrounds - Dark, professional */
     --bg-primary: #0B0E11;
     --bg-surface: #12161C;
-    --bg-card: #161B22;
+    --bg-card: rgba(22, 27, 34, 0.6);
+    /* More transparent for glass */
+
+    /* Liquid Glass Tokens */
+    --glass-bg: rgba(22, 27, 34, 0.15);
+    /* Much more transparent (was 0.45) */
+    --glass-border: rgba(255, 255, 255, 0.12);
+    /* Slightly clearer border */
+    --glass-shine: rgba(255, 255, 255, 0.08);
+    --glass-blur: 8px;
+    /* Less blurry (was 12px/16px in usage) */
 
     /* Accent - Mantle Mint (ONLY ONE) */
     --accent-mint: #6ED6C9;

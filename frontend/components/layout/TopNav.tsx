@@ -17,7 +17,7 @@ export function TopNav() {
     };
 
     return (
-        <nav className="fixed top-0 left-0 right-0 h-16 bg-[#12161C]/80 backdrop-blur-md border-b border-white/[0.04] z-50">
+        <nav className="fixed top-0 left-0 right-0 h-16 bg-[var(--glass-bg)] backdrop-blur-[8px] border-b border-[var(--glass-border)] z-50 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
             <div className="flex items-center justify-between h-full px-6 relative">
                 {/* Left: Section name */}
                 <div className="text-[#9BA4AE] text-sm font-medium">

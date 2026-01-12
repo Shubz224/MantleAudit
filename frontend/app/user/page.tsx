@@ -224,7 +224,7 @@ export default function UserTradePage() {
 
                     {/* Balance Card */}
                     {isConnected && (
-                        <Card padding="lg" className="bg-gradient-to-r from-[#6ED6C9]/10 to-[#8B5CF6]/10">
+                        <Card padding="lg" className="">
                             <div className="flex items-center justify-between">
                                 <div>
                                     <p className="text-xs text-[#9BA4AE] uppercase mb-1">Your Vault Balance</p>
