@@ -1,7 +1,8 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/vault/page": "app/vault/page.js",
+  "/user/page": "app/user/page.js",
   "/deposit/page": "app/deposit/page.js",
   "/auditor/page": "app/auditor/page.js",
-  "/user/page": "app/user/page.js"
+  "/curator/page": "app/curator/page.js"
 }

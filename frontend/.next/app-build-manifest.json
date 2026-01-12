@@ -11,10 +11,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/vault/page": [
+    "/user/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/vault/page.js"
+      "static/chunks/app/user/page.js"
     ],
     "/deposit/page": [
       "static/chunks/webpack.js",
@@ -31,10 +31,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/curator/page.js"
     ],
-    "/user/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/user/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

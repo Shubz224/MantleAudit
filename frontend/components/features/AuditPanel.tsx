@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { X, CheckCircle, XCircle, FileText, Calendar, Globe, Hash, AlertTriangle, ChevronRight, Lock, ShieldCheck, RefreshCw } from 'lucide-react';
+import { X, CheckCircle, XCircle, FileText, Calendar, Globe, Hash, AlertTriangle, ChevronRight, Lock, ShieldCheck, RefreshCw, Shield } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { useState } from 'react';
 
@@ -116,76 +116,127 @@ export function AuditPanel({ tx, onClose }: AuditPanelProps) {
 
                 {/* Verification Controls */}
                 <div className="space-y-4">
-                    <h4 className="text-sm font-semibold text-[#E6EDF3] uppercase tracking-wider">Required Checks</h4>
+                    {tx.isVaultTx ? (
+                        // VAULT TRANSACTION: Show only PAC verification
+                        <>
+                            <h4 className="text-sm font-semibold text-[#E6EDF3] uppercase tracking-wider flex items-center gap-2">
+                                <Shield className="w-4 h-4 text-[#6ED6C9]" />
+                                Vault Transaction (Privacy Mode)
+                            </h4>
 
-                    {['KYC', 'AML', 'YIELD'].map((type) => {
-                        const result = results[type];
-                        const isVerifying = verifying === type;
-
-                        return (
-                            <div key={type} className="bg-[#0B0E11] rounded-xl border border-white/[0.06] overflow-hidden">
-                                <div className="p-4 flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`p-2 rounded-lg ${result?.passed ? 'bg-[#22C55E]/10 text-[#22C55E]' :
-                                                result ? 'bg-[#EF4444]/10 text-[#EF4444]' :
-                                                    'bg-[#161B22] text-[#9BA4AE]'
-                                            }`}>
-                                            <ShieldCheck className="w-4 h-4" />
+                            <div className="bg-gradient-to-br from-[#6ED6C9]/10 to-[#0B0E11] rounded-xl border border-[#6ED6C9]/30 overflow-hidden">
+                                <div className="p-4">
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <div className="p-2 rounded-lg bg-[#6ED6C9]/20 text-[#6ED6C9]">
+                                            <Lock className="w-4 h-4" />
                                         </div>
                                         <div>
-                                            <p className="text-sm font-medium text-[#E6EDF3]">{type} Compliance</p>
-                                            <p className="text-xs text-[#9BA4AE]">
-                                                {result?.passed ? 'Verified' : result ? 'Verification Failed' : 'Pending Verification'}
-                                            </p>
+                                            <p className="text-sm font-medium text-[#E6EDF3]">Private Activity Commitment (PAC)</p>
+                                            <p className="text-xs text-[#9BA4AE]">KYC + AML + Yield Combined</p>
                                         </div>
                                     </div>
 
-                                    {result ? (
-                                        result.passed ? (
-                                            <div className="flex items-center gap-2 text-[#22C55E] text-xs font-medium px-3 py-1 bg-[#22C55E]/10 rounded-full">
-                                                <CheckCircle className="w-3 h-3" />
-                                                PASSED
+                                    {tx.pacHash ? (
+                                        <>
+                                            <div className="bg-[#0B0E11] rounded-lg p-3 mb-3">
+                                                <p className="text-xs text-[#9BA4AE] mb-1">PAC Hash</p>
+                                                <p className="text-xs font-mono text-[#6ED6C9] break-all">{tx.pacHash}</p>
                                             </div>
-                                        ) : (
-                                            <div className="flex items-center gap-2 text-[#EF4444] text-xs font-medium px-3 py-1 bg-[#EF4444]/10 rounded-full">
-                                                <XCircle className="w-3 h-3" />
-                                                FAILED
-                                            </div>
-                                        )
+
+                                            <button
+                                                onClick={() => window.open(`https://sepolia.mantlescan.xyz/tx/${tx.id}#eventlog`, '_blank')}
+                                                className="w-full px-4 py-2 bg-[#6ED6C9] hover:bg-[#5AC2B5] text-[#0B0E11] rounded-lg text-sm font-medium transition-all flex items-center justify-center gap-2"
+                                            >
+                                                <ShieldCheck className="w-4 h-4" />
+                                                Verify PAC On-Chain
+                                            </button>
+
+                                            <p className="text-xs text-[#9BA4AE] mt-3 flex items-center gap-2">
+                                                <AlertTriangle className="w-3 h-3" />
+                                                Individual proofs (KYC/AML/Yield) remain private. Only PAC is public.
+                                            </p>
+                                        </>
                                     ) : (
-                                        <button
-                                            onClick={() => runVerification(type as any)}
-                                            disabled={!!verifying}
-                                            className="px-4 py-2 bg-[#161B22] hover:bg-[#6ED6C9]/10 hover:text-[#6ED6C9] border border-white/[0.1] hover:border-[#6ED6C9]/30 rounded-lg text-xs font-medium text-[#E6EDF3] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                                        >
-                                            {isVerifying ? (
-                                                <>
-                                                    <RefreshCw className="w-3 h-3 animate-spin" />
-                                                    Verifying...
-                                                </>
-                                            ) : (
-                                                'Verify Proof'
-                                            )}
-                                        </button>
+                                        <p className="text-xs text-[#EF4444]">PAC hash not found for this transaction</p>
                                     )}
                                 </div>
+                            </div>
+                        </>
+                    ) : (
+                        // REGULAR TRANSACTION: Show individual proof verification
+                        <>
+                            <h4 className="text-sm font-semibold text-[#E6EDF3] uppercase tracking-wider">Required Checks</h4>
 
-                                {result && (
-                                    <div className="bg-[#161B22]/50 px-4 py-3 border-t border-white/[0.04] space-y-2">
-                                        <p className="text-xs text-[#9BA4AE]">{result.description}</p>
-                                        {result.txHash && (
-                                            <button
-                                                onClick={() => window.open(`https://explorer.sepolia.mantle.xyz/tx/${result.txHash}`, '_blank')}
-                                                className="text-xs px-3 py-1.5 bg-[#6ED6C9]/10 hover:bg-[#6ED6C9]/20 border border-[#6ED6C9]/20 hover:border-[#6ED6C9]/30 rounded-lg text-[#6ED6C9] hover:text-white transition-all"
-                                            >
-                                                View on Explorer
-                                            </button>
+                            {['KYC', 'AML', 'YIELD'].map((type) => {
+                                const result = results[type];
+                                const isVerifying = verifying === type;
+
+                                return (
+                                    <div key={type} className="bg-[#0B0E11] rounded-xl border border-white/[0.06] overflow-hidden">
+                                        <div className="p-4 flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`p-2 rounded-lg ${result?.passed ? 'bg-[#22C55E]/10 text-[#22C55E]' :
+                                                    result ? 'bg-[#EF4444]/10 text-[#EF4444]' :
+                                                        'bg-[#161B22] text-[#9BA4AE]'
+                                                    }`}>
+                                                    <ShieldCheck className="w-4 h-4" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-medium text-[#E6EDF3]">{type} Compliance</p>
+                                                    <p className="text-xs text-[#9BA4AE]">
+                                                        {result?.passed ? 'Verified' : result ? 'Verification Failed' : 'Pending Verification'}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            {result ? (
+                                                result.passed ? (
+                                                    <div className="flex items-center gap-2 text-[#22C55E] text-xs font-medium px-3 py-1 bg-[#22C55E]/10 rounded-full">
+                                                        <CheckCircle className="w-3 h-3" />
+                                                        PASSED
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-center gap-2 text-[#EF4444] text-xs font-medium px-3 py-1 bg-[#EF4444]/10 rounded-full">
+                                                        <XCircle className="w-3 h-3" />
+                                                        FAILED
+                                                    </div>
+                                                )
+                                            ) : (
+                                                <button
+                                                    onClick={() => runVerification(type as any)}
+                                                    disabled={!!verifying}
+                                                    className="px-4 py-2 bg-[#161B22] hover:bg-[#6ED6C9]/10 hover:text-[#6ED6C9] border border-white/[0.1] hover:border-[#6ED6C9]/30 rounded-lg text-xs font-medium text-[#E6EDF3] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                                >
+                                                    {isVerifying ? (
+                                                        <>
+                                                            <RefreshCw className="w-3 h-3 animate-spin" />
+                                                            Verifying...
+                                                        </>
+                                                    ) : (
+                                                        'Verify Proof'
+                                                    )}
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        {result && (
+                                            <div className="bg-[#161B22]/50 px-4 py-3 border-t border-white/[0.04] space-y-2">
+                                                <p className="text-xs text-[#9BA4AE]">{result.description}</p>
+                                                {result.txHash && (
+                                                    <button
+                                                        onClick={() => window.open(`https://explorer.sepolia.mantle.xyz/tx/${result.txHash}`, '_blank')}
+                                                        className="text-xs px-3 py-1.5 bg-[#6ED6C9]/10 hover:bg-[#6ED6C9]/20 border border-[#6ED6C9]/20 hover:border-[#6ED6C9]/30 rounded-lg text-[#6ED6C9] hover:text-white transition-all"
+                                                    >
+                                                        View on Explorer
+                                                    </button>
+                                                )}
+                                            </div>
                                         )}
                                     </div>
-                                )}
-                            </div>
-                        );
-                    })}
+                                );
+                            })}
+                        </>
+                    )}
                 </div>
 
                 <div className="h-px bg-white/[0.04]" />

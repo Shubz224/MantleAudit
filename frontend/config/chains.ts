@@ -25,3 +25,10 @@ export const mantleSepolia = defineChain({
     },
     testnet: true,
 });
+
+
+export const TOKENS = {
+    MNT: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",  // Native Mantle
+    USDT: "0xCc75AFc81847983e3E1937fC07d564b68d18aEbc", // Mock USDT
+    METH: "0xf6C198a6A58924D73fBdc59Da1C157Eb8A48E9dE"  // Mock METH
+};

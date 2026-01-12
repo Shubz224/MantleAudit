@@ -1,0 +1,31 @@
+🔍 STARTING DEBUG FETCH...
+----------------------------------------
+RPC URL: https://rpc.sepolia.mantle.xyz
+Vault Address: 0xd3ec7999EDdAd985a5b79591Ddf793f7F893D646
+Current Block: 33335608
+Creating filter for PrivateTransferExecuted...
+Scanning from 33330608 to 33335608 (Range: 5000)
+
+✅ FOUND 4 EVENTS:
+
+[1] Tx: 0x2292268e7be8345d04cd70e2bfdef83eaf4cba00ac456c066683983bc674b9cd
+    Block: 33334322
+    PAC: 0x652aed4e3de56858e04508b6b738cc5018d44516f5134f2c9ddee227168c7b21
+    To: 0xEF8b133D82dF774Ccc0Ed4337Ac5d91Ff5755340
+
+[2] Tx: 0x428c9d17530a71f0b1318093aa31fd1c30d05c8869a85912aa56e9eb9a87a19b
+    Block: 33334571
+    PAC: 0x4aba02a652f30ec64d646914aba9706b5d6c01edbe775fa2ec60ad4f92644baa
+    To: 0x7E628B523Be9992DEbd21c1a006B731275f1Ca0A
+
+[3] Tx: 0x463739bd90b7d2d8413669ef4975fa021660c39333d74eeb0c4d5483c5d0b3fe
+    Block: 33334696
+    PAC: 0xa8eb044009f0864fc90f9db3fbeaee544b061100484269e2264a357dd2fd45cf
+    To: 0xc65e5b8451d16Ac73ABDA5eb237e641be2503559
+
+[4] Tx: 0x73a29f6fc3ed200396046b16763ea23148953b0b52bade0ea29a6e35a6ca6ad5
+    Block: 33335311
+    PAC: 0x8d6a794df7031bfde78713874e67bcea3ae21157a2617410f535247600cac433
+    To: 0xc65e5b8451d16Ac73ABDA5eb237e641be2503559
+
+----------------------------------------

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { StatusPill } from '../ui/Badge';
 import { TableSkeleton } from '../ui/Skeleton';
 import { EmptyState } from '../ui/EmptyState';
-import { FileText, ExternalLink } from 'lucide-react';
+import { FileText, ExternalLink, Shield, Lock } from 'lucide-react';
 
 interface Transaction {
     id: string;
@@ -12,6 +12,8 @@ interface Transaction {
     timestamp: string;
     status: string;
     commitmentHash?: string;
+    isVaultTx?: boolean;
+    pacHash?: string;
 }
 
 interface TransactionTableProps {
@@ -65,12 +67,27 @@ export function TransactionTable({ transactions, loading = false, onSelectTx }: 
                             animate={{ opacity: 1 }}
                             transition={{ delay: index * 0.02, duration: 0.15 }}
                             onClick={() => onSelectTx?.(tx)}
-                            className="border-b border-white/[0.04] hover:bg-white/[0.02] cursor-pointer transition-all duration-150"
+                            className={`border-b border-white/[0.04] hover:bg-white/[0.02] cursor-pointer transition-all duration-150 ${tx.isVaultTx ? 'bg-[#6ED6C9]/5' : ''
+                                }`}
                         >
                             <td className="py-4 px-4">
-                                <span className="font-mono text-sm text-[#E6EDF3]">
-                                    {tx.id.slice(0, 10)}...{tx.id.slice(-4)}
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <span className="font-mono text-sm text-[#E6EDF3]">
+                                        {tx.id.slice(0, 10)}...{tx.id.slice(-4)}
+                                    </span>
+                                    {tx.isVaultTx && (
+                                        <span className="px-2 py-0.5 bg-[#6ED6C9]/20 text-[#6ED6C9] text-xs rounded-full flex items-center gap-1 font-medium">
+                                            <Shield className="w-3 h-3" />
+                                            Vault
+                                        </span>
+                                    )}
+                                    {tx.pacHash && (
+                                        <span className="px-2 py-0.5 bg-[#F59E0B]/20 text-[#F59E0B] text-xs rounded-full flex items-center gap-1">
+                                            <Lock className="w-3 h-3" />
+                                            PAC
+                                        </span>
+                                    )}
+                                </div>
                             </td>
                             <td className="py-4 px-4 text-sm text-[#E6EDF3]">
                                 {tx.protocol}

@@ -1,0 +1,15 @@
+{
+  "network": "mantleSepolia",
+  "chainId": "5003",
+  "deployer": "0xEF8b133D82dF774Ccc0Ed4337Ac5d91Ff5755340",
+  "timestamp": "2026-01-12T07:59:26.349Z",
+  "contracts": {
+    "AuditRegistry": "0x065Cb4C3de572Dd4bBE3D53aC63354Bb1006AF0C",
+    "AMLVerifier": "0xc8681b93B62086f43276b86ba7d033b6caF4CA71",
+    "AuditVerifier": "0x07eb1554c6c2d6c30b8aE8B4C074052dC91B261e",
+    "ComplianceNFT": "0xE81c16Fd28EE1dA0f03e3072DFA2ce2D961E3157",
+    "MockMETH": "0xf6C198a6A58924D73fBdc59Da1C157Eb8A48E9dE",
+    "MockUSDT": "0xCc75AFc81847983e3E1937fC07d564b68d18aEbc",
+    "CuratorVault": "0x1a60c3a11A5865092FA05De433e6eE429080DE85"
+  }
+}

@@ -122,7 +122,11 @@ class ContractService {
 
     async getAllTransactions() {
         try {
+            console.log('[REGULAR-TXS] Fetching transactions from Registry...');
+            console.log('[REGULAR-TXS] Registry Address:', this.registryContract.target);
+
             const count = await this.registryContract.getTransactionCount();
+            console.log('[REGULAR-TXS] Total count on-chain:', count.toString());
             const transactions = [];
 
             for (let i = 0; i < count; i++) {
@@ -297,6 +301,59 @@ class ContractService {
         } catch (error) {
             console.error("Error withdrawing:", error);
             throw error;
+        }
+    }
+
+    /**
+     * Get vault transactions using EVENT FILTERING (100x faster!)
+     * Fetches PrivateTransferExecuted events which include PAC hash
+     */
+    async getVaultTransactions() {
+        try {
+            console.log('[VAULT-TXS] Fetching vault transactions using events...');
+            console.log('[VAULT-TXS] Contract Address:', this.vaultContract.target);
+
+            // Query PrivateTransferExecuted events from the vault
+            const filter = this.vaultContract.filters.PrivateTransferExecuted();
+            const currentBlock = await this.provider.getBlockNumber();
+            const startBlock = Math.max(0, currentBlock - 9000); // 9k blocks (safe under 10k RPC limit)
+
+            console.log('[VAULT-TXS] Querying events from block', startBlock, 'to', currentBlock);
+
+            const events = await this.vaultContract.queryFilter(filter, startBlock, currentBlock);
+
+            console.log('[VAULT-TXS] Found', events.length, 'PrivateTransferExecuted events');
+
+            const vaultTxs = [];
+
+            for (const event of events.slice(-20)) { // Last 20 events
+                try {
+                    const block = await this.provider.getBlock(event.blockNumber);
+
+                    vaultTxs.push({
+                        hash: event.transactionHash,
+                        from: this.vaultContract.target, // Vault address
+                        to: event.args.to,
+                        value: event.args.amount.toString(),
+                        token: event.args.token,
+                        pac: event.args.pac, // PAC HASH! ✅
+                        timestamp: block?.timestamp || 0,
+                        blockNumber: event.blockNumber,
+                        gasUsed: '0'
+                    });
+
+                    console.log('[VAULT-TXS] ✓ Transaction:', event.transactionHash, 'PAC:', event.args.pac);
+                } catch (err) {
+                    console.error('[VAULT-TXS] Error processing event:', err.message);
+                }
+            }
+
+            console.log('[VAULT-TXS] Returning', vaultTxs.length, 'vault transactions');
+            return vaultTxs;
+
+        } catch (error) {
+            console.error('[VAULT-TXS] Error fetching vault transactions:', error);
+            return [];
         }
     }
 }

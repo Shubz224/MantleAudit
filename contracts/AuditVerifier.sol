@@ -11,9 +11,9 @@ import "./AMLVerifier.sol";
 contract AuditVerifier {
     /// @notice Types of audits supported
     enum AuditType {
-        KYC,      // Know Your Customer verification
-        AML,      // Anti-Money Laundering / Sanctions check
-        YIELD     // Yield threshold compliance
+        KYC, // Know Your Customer verification
+        AML, // Anti-Money Laundering / Sanctions check
+        YIELD // Yield threshold compliance
     }
 
     /// @notice Audit result structure
@@ -70,7 +70,10 @@ contract AuditVerifier {
      * @param auditor Address to modify
      * @param authorized True to authorize, false to deauthorize
      */
-    function setAuditorAuthorization(address auditor, bool authorized) external onlyOwner {
+    function setAuditorAuthorization(
+        address auditor,
+        bool authorized
+    ) external onlyOwner {
         authorizedAuditors[auditor] = authorized;
         emit AuditorAuthorizationChanged(auditor, authorized);
     }
@@ -145,7 +148,13 @@ contract AuditVerifier {
             auditor: msg.sender
         });
 
-        emit AuditCompleted(txId, AuditType.AML, true, msg.sender, block.timestamp);
+        emit AuditCompleted(
+            txId,
+            AuditType.AML,
+            true,
+            msg.sender,
+            block.timestamp
+        );
     }
 
     /**
@@ -154,11 +163,10 @@ contract AuditVerifier {
      * @param auditType Type of audit to query
      * @return Audit result
      */
-    function getAuditResult(bytes32 txId, AuditType auditType) 
-        external 
-        view 
-        returns (AuditResult memory) 
-    {
+    function getAuditResult(
+        bytes32 txId,
+        AuditType auditType
+    ) external view returns (AuditResult memory) {
         return auditResults[txId][auditType];
     }
 
@@ -172,9 +180,13 @@ contract AuditVerifier {
         AuditResult memory amlResult = auditResults[txId][AuditType.AML];
         AuditResult memory yieldResult = auditResults[txId][AuditType.YIELD];
 
-        return kycResult.timestamp > 0 && kycResult.passed &&
-               amlResult.timestamp > 0 && amlResult.passed &&
-               yieldResult.timestamp > 0 && yieldResult.passed;
+        return
+            kycResult.timestamp > 0 &&
+            kycResult.passed &&
+            amlResult.timestamp > 0 &&
+            amlResult.passed &&
+            yieldResult.timestamp > 0 &&
+            yieldResult.passed;
     }
 
     /**
@@ -183,7 +195,11 @@ contract AuditVerifier {
      * @param auditType Type of audit
      * @param passed Whether audit passed
      */
-    function _recordAudit(bytes32 txId, AuditType auditType, bool passed) internal {
+    function _recordAudit(
+        bytes32 txId,
+        AuditType auditType,
+        bool passed
+    ) internal {
         auditResults[txId][auditType] = AuditResult({
             txId: txId,
             auditType: auditType,
@@ -192,7 +208,13 @@ contract AuditVerifier {
             auditor: msg.sender
         });
 
-        emit AuditCompleted(txId, auditType, passed, msg.sender, block.timestamp);
+        emit AuditCompleted(
+            txId,
+            auditType,
+            passed,
+            msg.sender,
+            block.timestamp
+        );
     }
 
     /**
@@ -201,15 +223,18 @@ contract AuditVerifier {
      * @param amount Deposit amount (for yield threshold check)
      * @return True if user has valid KYC and AML proofs
      */
-    function isCompliantForDeposit(bytes32 userTxId, uint256 amount) external view returns (bool) {
+    function isCompliantForDeposit(
+        bytes32 userTxId,
+        uint256 amount
+    ) external view returns (bool) {
         AuditResult memory kycResult = auditResults[userTxId][AuditType.KYC];
         AuditResult memory amlResult = auditResults[userTxId][AuditType.AML];
-        
+
         // Check KYC and AML are valid and passed
         // In production: add expiry check (e.g., valid for 90 days)
         bool kycValid = kycResult.timestamp > 0 && kycResult.passed;
         bool amlValid = amlResult.timestamp > 0 && amlResult.passed;
-        
+
         return kycValid && amlValid;
     }
 
@@ -218,9 +243,11 @@ contract AuditVerifier {
      * @param vaultTxId Transaction ID for the vault swap operation
      * @return True if all compliance proofs exist and passed
      */
-    function isCompliantForSwap(bytes32 vaultTxId) external view returns (bool) {
+    function isCompliantForSwap(
+        bytes32 vaultTxId
+    ) external view returns (bool) {
         // For swaps, we require full compliance (KYC + AML + Yield)
-        return isFullyCompliant(vaultTxId);
+        return this.isFullyCompliant(vaultTxId);
     }
 
     /**
@@ -231,19 +258,23 @@ contract AuditVerifier {
      * @return yieldPassed Whether Yield passed
      * @return oldestTimestamp Oldest proof timestamp (for expiry checking)
      */
-    function getUserComplianceStatus(bytes32 userTxId) 
-        external 
-        view 
+    function getUserComplianceStatus(
+        bytes32 userTxId
+    )
+        external
+        view
         returns (
             bool kycPassed,
             bool amlPassed,
             bool yieldPassed,
             uint256 oldestTimestamp
-        ) 
+        )
     {
         AuditResult memory kycResult = auditResults[userTxId][AuditType.KYC];
         AuditResult memory amlResult = auditResults[userTxId][AuditType.AML];
-        AuditResult memory yieldResult = auditResults[userTxId][AuditType.YIELD];
+        AuditResult memory yieldResult = auditResults[userTxId][
+            AuditType.YIELD
+        ];
 
         kycPassed = kycResult.timestamp > 0 && kycResult.passed;
         amlPassed = amlResult.timestamp > 0 && amlResult.passed;
@@ -254,7 +285,9 @@ contract AuditVerifier {
         if (amlResult.timestamp > 0 && amlResult.timestamp < oldestTimestamp) {
             oldestTimestamp = amlResult.timestamp;
         }
-        if (yieldResult.timestamp > 0 && yieldResult.timestamp < oldestTimestamp) {
+        if (
+            yieldResult.timestamp > 0 && yieldResult.timestamp < oldestTimestamp
+        ) {
             oldestTimestamp = yieldResult.timestamp;
         }
     }

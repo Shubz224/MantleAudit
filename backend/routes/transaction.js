@@ -80,6 +80,46 @@ router.get('/', async (req, res) => {
 });
 
 /**
+ * Get vault transactions (sent FROM vault address)
+ * GET /api/transaction/vault
+ * IMPORTANT: This must come BEFORE /:txId route!
+ */
+router.get('/vault', async (req, res) => {
+    try {
+        console.log('[API] Fetching vault transactions from blockchain...');
+
+        const vaultTxs = await contractService.getVaultTransactions();
+
+        console.log(`[API] Found ${vaultTxs.length} vault transactions`);
+
+        res.json({
+            success: true,
+            transactions: vaultTxs.map(tx => ({
+                id: tx.hash,
+                hash: tx.hash,
+                from: tx.from,
+                to: tx.to,
+                value: tx.value,
+                timestamp: new Date(Number(tx.timestamp) * 1000).toLocaleString(),
+                blockNumber: tx.blockNumber,
+                isVaultTx: true,
+                status: 'Pending Audit', // REQUIRED for StatusPill component
+                protocol: 'Vault Transfer',
+                pacHash: tx.pac // PAC HASH! ✅
+            }))
+        });
+
+    } catch (error) {
+        console.error('[API] Vault transaction fetch error:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message,
+            transactions: []
+        });
+    }
+});
+
+/**
  * Get single transaction details
  * GET /api/transaction/:txId
  */
