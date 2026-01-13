@@ -115,34 +115,34 @@ export default function MantlePage() {
           </div>
 
           {/* Value Propositions - Liquid Glass Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-[1100px] mt-4">
-            {/* Feature 1 */}
-            <div className="backdrop-blur-xl bg-[#0B0E11]/80 border border-white/[0.06] rounded-xl p-8 flex flex-col items-center text-center gap-4 transition-all duration-300 opacity-0 animate-[fadeInUp_1s_ease-out_0.9s_forwards] hover:-translate-y-2 hover:border-[#6ED6C9]/30 hover:shadow-[0_10px_30px_rgba(110,214,201,0.15)] group">
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-[1100px] mt-4"> */}
+          {/* Feature 1 */}
+          {/* <div className="backdrop-blur-xl bg-[#0B0E11]/80 border border-white/[0.06] rounded-xl p-8 flex flex-col items-center text-center gap-4 transition-all duration-300 opacity-0 animate-[fadeInUp_1s_ease-out_0.9s_forwards] hover:-translate-y-2 hover:border-[#6ED6C9]/30 hover:shadow-[0_10px_30px_rgba(110,214,201,0.15)] group">
               <div className="text-5xl drop-shadow-[0_0_15px_rgba(110,214,201,0.2)] animate-[iconFloat_3s_ease-in-out_infinite] grayscale group-hover:grayscale-0 transition-all duration-500">🛡︎</div>
               <h3 className="font-['Orbitron',_sans-serif] text-xl font-bold text-[#E6EDF3] tracking-wide uppercase group-hover:text-[#6ED6C9] transition-colors">Stop Alpha Leakage</h3>
               <p className="text-sm leading-relaxed text-[#9BA4AE]">
                 Execute strategies without revealing your positions to front-runners
               </p>
-            </div>
+            </div> */}
 
-            {/* Feature 2 */}
-            <div className="backdrop-blur-xl bg-[#0B0E11]/80 border border-white/[0.06] rounded-xl p-8 flex flex-col items-center text-center gap-4 transition-all duration-300 opacity-0 animate-[fadeInUp_1s_ease-out_1.1s_forwards] hover:-translate-y-2 hover:border-[#6ED6C9]/30 hover:shadow-[0_10px_30px_rgba(110,214,201,0.15)] group">
+          {/* Feature 2 */}
+          {/* <div className="backdrop-blur-xl bg-[#0B0E11]/80 border border-white/[0.06] rounded-xl p-8 flex flex-col items-center text-center gap-4 transition-all duration-300 opacity-0 animate-[fadeInUp_1s_ease-out_1.1s_forwards] hover:-translate-y-2 hover:border-[#6ED6C9]/30 hover:shadow-[0_10px_30px_rgba(110,214,201,0.15)] group">
               <div className="text-5xl drop-shadow-[0_0_15px_rgba(110,214,201,0.2)] animate-[iconFloat_3s_ease-in-out_infinite] grayscale group-hover:grayscale-0 transition-all duration-500">✓</div>
               <h3 className="font-['Orbitron',_sans-serif] text-xl font-bold text-[#E6EDF3] tracking-wide uppercase group-hover:text-[#6ED6C9] transition-colors">Trustless Compliance</h3>
               <p className="text-sm leading-relaxed text-[#9BA4AE]">
                 Zero-knowledge proofs ensure regulatory compliance without compromising privacy
               </p>
-            </div>
+            </div> */}
 
-            {/* Feature 3 */}
-            <div className="backdrop-blur-xl bg-[#0B0E11]/80 border border-white/[0.06] rounded-xl p-8 flex flex-col items-center text-center gap-4 transition-all duration-300 opacity-0 animate-[fadeInUp_1s_ease-out_1.3s_forwards] hover:-translate-y-2 hover:border-[#6ED6C9]/30 hover:shadow-[0_10px_30px_rgba(110,214,201,0.15)] group">
+          {/* Feature 3 */}
+          {/* <div className="backdrop-blur-xl bg-[#0B0E11]/80 border border-white/[0.06] rounded-xl p-8 flex flex-col items-center text-center gap-4 transition-all duration-300 opacity-0 animate-[fadeInUp_1s_ease-out_1.3s_forwards] hover:-translate-y-2 hover:border-[#6ED6C9]/30 hover:shadow-[0_10px_30px_rgba(110,214,201,0.15)] group">
               <div className="text-5xl drop-shadow-[0_0_15px_rgba(110,214,201,0.2)] animate-[iconFloat_3s_ease-in-out_infinite] grayscale group-hover:grayscale-0 transition-all duration-500">⚡</div>
               <h3 className="font-['Orbitron',_sans-serif] text-xl font-bold text-[#E6EDF3] tracking-wide uppercase group-hover:text-[#6ED6C9] transition-colors">Mantle-Native Economics</h3>
               <p className="text-sm leading-relaxed text-[#9BA4AE]">
                 Built specifically for Mantle v2's institutional-grade infrastructure
               </p>
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
 
           {/* Value Proposition Quote - Liquid Glass */}
           <div className="relative backdrop-blur-xl bg-[#0B0E11]/80 border-y border-white/[0.06] rounded-xl p-12 w-full shadow-2xl overflow-hidden opacity-0 animate-[fadeInUp_1s_ease-out_1.6s_forwards] hover:border-[#6ED6C9]/20 transition-all duration-500">
