@@ -1,0 +1,466 @@
+/*!************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[12].use[3]!./css/mantle.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Tektur:wght@400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+/* Futuristic Geometric Color Palette */
+:root {
+    --mantle-dark-bg: #000000;
+    --mantle-green-dark: #001a1a;
+    --mantle-green-medium: #052424;
+    --mantle-green-light: #0b3d3d;
+    --mantle-green-accent: #4eb3a6;
+    --mantle-green-bright: #5ac2b5;
+    --mantle-glass-bg: rgba(0, 26, 26, 0.3);
+    --mantle-glass-border: rgba(90, 194, 181, 0.3);
+    --mantle-glow-green: rgba(90, 194, 181, 0.6);
+    --mantle-text-primary: #ffffff;
+    --mantle-text-secondary: #5ac2b5;
+    --mantle-text-muted: #4a9d95;
+    --mantle-grid-color: rgba(90, 194, 181, 0.1);
+}
+
+/* Animated Background Gradient */
+@keyframes gradientShift {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+/* Background Overlay with Grid */
+.mantle-bg-overlay {
+    background-image:
+        linear-gradient(var(--mantle-grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--mantle-grid-color) 1px, transparent 1px),
+        linear-gradient(45deg, transparent 48%, var(--mantle-grid-color) 48%, var(--mantle-grid-color) 52%, transparent 52%);
+    background-size: 50px 50px, 50px 50px, 100px 100px;
+}
+
+/* Logo Rotation Keyframes */
+@keyframes logoRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+/* Logo SVG Styling - styling internal SVG paths */
+.mantle-logo-container svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 20px var(--mantle-glow-green));
+}
+
+/* Animation Keyframes */
+@keyframes titleGlow {
+
+    0%,
+    100% {
+        text-shadow:
+            0 0 20px var(--mantle-glow-green),
+            0 0 40px var(--mantle-glow-green),
+            0 0 60px var(--mantle-glow-green),
+            0 0 80px var(--mantle-green-accent);
+    }
+
+    50% {
+        text-shadow:
+            0 0 30px var(--mantle-glow-green),
+            0 0 60px var(--mantle-glow-green),
+            0 0 90px var(--mantle-glow-green),
+            0 0 120px var(--mantle-green-accent);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes iconFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes shimmer {
+
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Glitch Animation */
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+
+    20% {
+        transform: translate(-2px, 2px);
+    }
+
+    40% {
+        transform: translate(-2px, -2px);
+    }
+
+    60% {
+        transform: translate(2px, 2px);
+    }
+
+    80% {
+        transform: translate(2px, -2px);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* Scanline Animation */
+@keyframes scanline {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(200%);
+    }
+}
+
+/* Height Glitch (Button Borders) */
+@keyframes heightGlitch {
+    0% {
+        height: 100%;
+    }
+
+    50% {
+        height: 50%;
+    }
+
+    100% {
+        height: 100%;
+    }
+}
+/*!**********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[12].use[3]!./css/logo.css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************/
+@keyframes slideAndRotate {
+    0% {
+        transform: translateX(-600px) rotate(0deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0) rotate(var(--rotation));
+        opacity: 1;
+    }
+}
+
+/* Outer spokes - each slides in and rotates to its position */
+.outer-spoke-0 {
+    --rotation: 0deg;
+    animation: slideAndRotate 0.6s ease-out 0s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-1 {
+    --rotation: 18deg;
+    animation: slideAndRotate 0.6s ease-out 0.05s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-2 {
+    --rotation: 36deg;
+    animation: slideAndRotate 0.6s ease-out 0.1s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-3 {
+    --rotation: 54deg;
+    animation: slideAndRotate 0.6s ease-out 0.15s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-4 {
+    --rotation: 72deg;
+    animation: slideAndRotate 0.6s ease-out 0.2s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-5 {
+    --rotation: 90deg;
+    animation: slideAndRotate 0.6s ease-out 0.25s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-6 {
+    --rotation: 108deg;
+    animation: slideAndRotate 0.6s ease-out 0.3s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-7 {
+    --rotation: 126deg;
+    animation: slideAndRotate 0.6s ease-out 0.35s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-8 {
+    --rotation: 144deg;
+    animation: slideAndRotate 0.6s ease-out 0.4s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-9 {
+    --rotation: 162deg;
+    animation: slideAndRotate 0.6s ease-out 0.45s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-10 {
+    --rotation: 180deg;
+    animation: slideAndRotate 0.6s ease-out 0.5s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-11 {
+    --rotation: 198deg;
+    animation: slideAndRotate 0.6s ease-out 0.55s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-12 {
+    --rotation: 216deg;
+    animation: slideAndRotate 0.6s ease-out 0.6s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-13 {
+    --rotation: 234deg;
+    animation: slideAndRotate 0.6s ease-out 0.65s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-14 {
+    --rotation: 252deg;
+    animation: slideAndRotate 0.6s ease-out 0.7s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-15 {
+    --rotation: 270deg;
+    animation: slideAndRotate 0.6s ease-out 0.75s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-16 {
+    --rotation: 288deg;
+    animation: slideAndRotate 0.6s ease-out 0.8s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-17 {
+    --rotation: 306deg;
+    animation: slideAndRotate 0.6s ease-out 0.85s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-18 {
+    --rotation: 324deg;
+    animation: slideAndRotate 0.6s ease-out 0.9s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.outer-spoke-19 {
+    --rotation: 342deg;
+    animation: slideAndRotate 0.6s ease-out 0.95s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+/* Inner spokes */
+.inner-spoke-0 {
+    --rotation: 15deg;
+    animation: slideAndRotate 0.6s ease-out 1.2s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-1 {
+    --rotation: 45deg;
+    animation: slideAndRotate 0.6s ease-out 1.26s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-2 {
+    --rotation: 75deg;
+    animation: slideAndRotate 0.6s ease-out 1.32s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-3 {
+    --rotation: 105deg;
+    animation: slideAndRotate 0.6s ease-out 1.38s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-4 {
+    --rotation: 135deg;
+    animation: slideAndRotate 0.6s ease-out 1.44s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-5 {
+    --rotation: 165deg;
+    animation: slideAndRotate 0.6s ease-out 1.5s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-6 {
+    --rotation: 195deg;
+    animation: slideAndRotate 0.6s ease-out 1.56s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-7 {
+    --rotation: 225deg;
+    animation: slideAndRotate 0.6s ease-out 1.62s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-8 {
+    --rotation: 255deg;
+    animation: slideAndRotate 0.6s ease-out 1.68s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-9 {
+    --rotation: 285deg;
+    animation: slideAndRotate 0.6s ease-out 1.74s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-10 {
+    --rotation: 315deg;
+    animation: slideAndRotate 0.6s ease-out 1.8s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+.inner-spoke-11 {
+    --rotation: 345deg;
+    animation: slideAndRotate 0.6s ease-out 1.86s forwards;
+    transform: translateX(-600px);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
+
+
+@keyframes slideAndRotate {
+    0% {
+        transform: translateX(-600px) rotate(0deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0) rotate(var(--rotation));
+        opacity: 1;
+    }
+}
+
+.center-icon-wrapper {
+    --rotation: 360deg;
+    animation: slideAndRotate 0.8s ease-out 2.5s forwards;
+    transform: translateX(-600px) rotate(0deg);
+    opacity: 0;
+    transform-origin: 256px 256px;
+}
