@@ -149,39 +149,44 @@ export default function UserTradePage() {
                 yield: pacData.proofs?.yield || yieldHash
             });
 
-            // Step 5: Execute Private Transfer (from VAULT address!)
+            // Step 5: Execute Private Transfer via Backend API (preserves privacy!)
             setProgress(85);
-            console.log('📤 [TX] Executing private transfer from VAULT...');
-            const provider = new ethers.BrowserProvider((window as any).ethereum);
-            const signer = await provider.getSigner();
-            const vaultContract = new ethers.Contract(
-                process.env.NEXT_PUBLIC_VAULT_ADDRESS!,
-                VAULT_ABI,
-                signer
-            );
+            console.log('📤 [TX] Executing private transfer via backend API...');
 
-            const tx = await vaultContract.executePrivateTransfer(
-                selectedToken,
-                recipient,
-                ethers.parseEther(amount),
-                generatedPac
-            );
+            const transferResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/vault/transfer`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: selectedToken,
+                    recipient: recipient,
+                    amount: ethers.parseEther(amount).toString(),
+                    pac: generatedPac,
+                    userAddress: address  // NEW: tell backend which user's balance to use
+                })
+            });
 
+            if (!transferResponse.ok) {
+                const errorData = await transferResponse.json();
+                throw new Error(errorData.error || 'Transfer failed');
+            }
+
+            const transferData = await transferResponse.json();
             console.log('⏳ [TX] Transaction sent, waiting for confirmation...');
-            console.log('🔗 [TX] Hash:', tx.hash);
-            setProgress(95);
+            console.log('🔗 [TX] Hash:', transferData.txHash);
 
-            const receipt = await tx.wait();
-            setTxHash(receipt.hash);
+            // Wait a bit for block confirmation
+            await new Promise(resolve => setTimeout(resolve, 3000));
+
             setProgress(100);
-
             console.log('✅ [TX] Transaction confirmed!');
-            console.log('🎉 [TX] Block:', receipt.blockNumber);
-            console.log('⛽ [TX] Gas used:', receipt.gasUsed.toString());
-            console.log('🔍 [TX] Explorer:', `https://sepolia.mantlescan.xyz/tx/${receipt.hash}`);
-            console.log('🏦 [PRIVACY] Sent FROM vault address (your identity hidden!)');
+            console.log('🎉 [TX] Block:', transferData.blockNumber);
+            console.log('⛽ [TX] Gas used:', transferData.gasUsed);
+            console.log('🔍 [TX] Explorer:', transferData.explorerUrl);
+            console.log('🏦 [PRIVACY] Sent via backend - your wallet address is HIDDEN!');
 
-            // Refresh balance
+            setTxHash(transferData.txHash);
             console.log('🔄 [BALANCE] Refreshing vault balance...');
             await fetchVaultBalance();
             console.log('✓ [BALANCE] Balance updated');

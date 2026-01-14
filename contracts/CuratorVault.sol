@@ -255,7 +255,8 @@ contract CuratorVault {
         address token,
         address to,
         uint256 amount,
-        bytes32 pac
+        bytes32 pac,
+        address onBehalfOf // NEW: whose balance to use
     ) external onlyCurator vaultActive returns (bytes32 txId) {
         require(to != address(0), "Invalid recipient");
         require(amount > 0, "Amount must be > 0");
@@ -263,15 +264,15 @@ contract CuratorVault {
 
         if (token == NATIVE_TOKEN) {
             // Sending native MNT
-            require(nativeBalance >= amount, "Insufficient MNT balance");
+            require(nativeBalance >= amount, "Insufficient vault balance");
             require(
-                deposits[msg.sender][NATIVE_TOKEN] >= amount,
+                deposits[onBehalfOf][NATIVE_TOKEN] >= amount,
                 "Insufficient depositor balance"
             );
 
             // Update balances
             nativeBalance -= amount;
-            deposits[msg.sender][NATIVE_TOKEN] -= amount; // ✅ CRITICAL FIX: Deduct from depositor
+            deposits[onBehalfOf][NATIVE_TOKEN] -= amount; // Deduct from user's balance
             vault.totalAUM -= amount;
 
             // Transfer MNT from vault to recipient
@@ -285,13 +286,13 @@ contract CuratorVault {
                 "Insufficient token balance"
             );
             require(
-                deposits[msg.sender][token] >= amount,
+                deposits[onBehalfOf][token] >= amount,
                 "Insufficient depositor balance"
             );
 
             // Update balances
             tokenBalances[token] -= amount;
-            deposits[msg.sender][token] -= amount; // ✅ CRITICAL FIX: Deduct from depositor
+            deposits[onBehalfOf][token] -= amount; // Deduct from user's balance
             vault.totalAUM -= amount; // Simplified AUM tracking
 
             // Transfer ERC20 from vault to recipient

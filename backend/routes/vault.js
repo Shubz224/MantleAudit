@@ -153,6 +153,54 @@ router.post('/generate-pac', async (req, res) => {
 });
 
 /**
+ * POST /api/vault/transfer
+ * Execute private transfer from vault (curator-only on contract, but accessible via API)
+ */
+router.post('/transfer', async (req, res) => {
+    try {
+        const { token, recipient, amount, pac, userAddress } = req.body;
+
+        if (!token || !recipient || !amount || !pac || !userAddress) {
+            return res.status(400).json({
+                success: false,
+                error: 'Missing required fields: token, recipient, amount, pac, userAddress'
+            });
+        }
+
+        console.log('[Private Transfer] Executing from vault...');
+        console.log('[Private Transfer] Token:', token);
+        console.log('[Private Transfer] Recipient:', recipient);
+        console.log('[Private Transfer] Amount:', amount);
+        console.log('[Private Transfer] PAC:', pac);
+        console.log('[Private Transfer] On behalf of:', userAddress);
+
+        // Backend calls executePrivateTransfer using curator's wallet
+        const result = await contractService.executePrivateTransfer(
+            token,
+            recipient,
+            amount,
+            pac,
+            userAddress  // NEW: which user's balance to deduct
+        );
+
+        res.json({
+            success: true,
+            txHash: result.txHash,
+            blockNumber: result.blockNumber,
+            gasUsed: result.gasUsed,
+            pac,
+            explorerUrl: `https://sepolia.mantlescan.xyz/tx/${result.txHash}`
+        });
+    } catch (error) {
+        console.error('[Private Transfer] ❌ Error:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Private transfer failed'
+        });
+    }
+});
+
+/**
  * POST /api/vault/swap
  * Execute private swap via FusionX
  */

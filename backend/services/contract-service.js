@@ -292,6 +292,32 @@ class ContractService {
         }
     }
 
+    async executePrivateTransfer(token, recipient, amount, pac, onBehalfOf) {
+        try {
+            const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, this.provider);
+            const vaultWithSigner = this.vaultContract.connect(wallet);
+
+            const tx = await vaultWithSigner.executePrivateTransfer(
+                token,
+                recipient,
+                amount,
+                pac,
+                onBehalfOf  // NEW: which user's balance to use
+            );
+
+            const receipt = await tx.wait();
+
+            return {
+                txHash: tx.hash,
+                blockNumber: receipt.blockNumber,
+                gasUsed: receipt.gasUsed.toString()
+            };
+        } catch (error) {
+            console.error("Error executing private transfer:", error);
+            throw error;
+        }
+    }
+
     async depositToVault(token, amount, complianceTxId) {
         try {
             const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, this.provider);
