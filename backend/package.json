@@ -1,7 +1,7 @@
 {
     "name": "mantle-audit-backend",
     "version": "1.0.0",
-    "description": "Backend API for MantleAudit - ZK proof generation and contract interaction",
+    "description": "Backend API for BlackBox - ZK proof generation and contract interaction",
     "main": "server.js",
     "scripts": {
         "start": "node server.js",

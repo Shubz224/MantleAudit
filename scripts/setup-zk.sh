@@ -3,7 +3,7 @@
 
 set -e
 
-echo "🚀 MantleAudit ZK Proof Setup"
+echo "🚀 BlackBox ZK Proof Setup"
 echo "=============================="
 
 # Use local binary
@@ -14,7 +14,7 @@ SNARKJS="./node_modules/.bin/snarkjs"
 echo "📦 Step 1: Generating Powers of Tau (bn128, 2^14)..."
 if [ ! -f "circuits/ptau/pot14_final.ptau" ]; then
     $SNARKJS powersoftau new bn128 14 circuits/ptau/pot14_0000.ptau
-    $SNARKJS powersoftau contribute circuits/ptau/pot14_0000.ptau circuits/ptau/pot14_0001.ptau --name="MantleAudit" -v
+    $SNARKJS powersoftau contribute circuits/ptau/pot14_0000.ptau circuits/ptau/pot14_0001.ptau --name="BlackBox" -v
     $SNARKJS powersoftau prepare phase2 circuits/ptau/pot14_0001.ptau circuits/ptau/pot14_final.ptau -v
     echo "✅ Powers of Tau complete"
 else
@@ -30,7 +30,7 @@ $CIRCOM circuits/aml_proof.circom -l node_modules --r1cs --wasm --sym -o circuit
 echo ""
 echo "🔐 Step 3: Groth16 setup for AML circuit..."
 $SNARKJS groth16 setup circuits/build/aml_proof.r1cs circuits/ptau/pot14_final.ptau circuits/build/aml_0000.zkey
-$SNARKJS zkey contribute circuits/build/aml_0000.zkey circuits/build/aml_final.zkey --name="MantleAudit AML" -v
+$SNARKJS zkey contribute circuits/build/aml_0000.zkey circuits/build/aml_final.zkey --name="BlackBox AML" -v
 $SNARKJS zkey export verificationkey circuits/build/aml_final.zkey circuits/build/aml_vk.json
 
 # Step 4: Generate Solidity Verifier

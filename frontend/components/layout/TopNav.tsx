@@ -39,7 +39,7 @@ export function TopNav() {
                             fill="currentColor"
                         />
                     </svg>
-                    <span className="text-xl font-bold text-[#E6EDF3]">MantleAudit</span>
+                    <span className="text-xl font-bold text-[#E6EDF3]">BlackBox</span>
                 </Link>
 
 

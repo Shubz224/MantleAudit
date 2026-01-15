@@ -171,7 +171,7 @@ export default function AuditorDashboard() {
                     {/* Main Content */}
                     <div className="flex gap-8 h-full flex-col">
                         {/* Regular Transactions */}
-                        <Card className="flex-1 overflow-hidden flex flex-col" padding="lg">
+                        {/* <Card className="flex-1 overflow-hidden flex flex-col" padding="lg">
                             <h3 className="text-lg font-semibold text-[#E6EDF3] mb-4">Regular Transactions</h3>
                             <div className="flex-1 overflow-y-auto">
                                 <TransactionTable
@@ -180,7 +180,7 @@ export default function AuditorDashboard() {
                                     onSelectTx={handleAudit}
                                 />
                             </div>
-                        </Card>
+                        </Card> */}
 
                         {/* Vault Transactions Section */}
                         <Card className="flex-1 overflow-hidden flex flex-col bg-gradient-to-br from-[#6ED6C9]/5 to-[#0B0E11] border-[#6ED6C9]/20" padding="lg">

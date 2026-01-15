@@ -1,4 +1,4 @@
-# MantleAudit Demo Flow (Judge-Ready Version)
+# BlackBox Demo Flow (Judge-Ready Version)
 
 ## 🎯 Complete Demo Flow (2:15 Minutes)
 
@@ -69,7 +69,7 @@ Click each → Proofs generated locally, ready for audit.
 ## 🎬 Demo Script for Judges (Under 3 Minutes)
 
 ### Opening (10 seconds)
-> "MantleAudit is a privacy-preserving compliance layer built on **Mantle v2 Skadi**, which makes low-cost ZK compliance economically viable."
+> "BlackBox is a privacy-preserving compliance layer built on **Mantle v2 Skadi**, which makes low-cost ZK compliance economically viable."
 
 ### Part 1: User Side (30 seconds)
 1. Show User Dashboard

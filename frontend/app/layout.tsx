@@ -7,7 +7,7 @@ import BackgroundLogo from '../components/BackgroundLogo';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MantleAudit - Privacy-Preserving Compliance",
+  title: "BlackBox - Privacy-Preserving Compliance",
   description: "Privacy-preserving compliance and audit system for Mantle Network",
   icons: {
     icon: '/favicon.svg',

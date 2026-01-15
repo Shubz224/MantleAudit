@@ -1,4 +1,4 @@
-# MantleAudit: Privacy-Preserving Compliance System
+# BlackBox: Privacy-Preserving Compliance System
 
 A zero-knowledge privacy layer for DeFi transactions on Mantle Network that enables **compliant anonymity** - proving regulatory compliance without revealing sensitive user data or transaction strategies.
 
@@ -6,7 +6,7 @@ A zero-knowledge privacy layer for DeFi transactions on Mantle Network that enab
 
 ## 🎯 What We Built
 
-**MantleAudit** is a privacy-preserving vault system that allows users to:
+**BlackBox** is a privacy-preserving vault system that allows users to:
 - ✅ Execute compliant DeFi transactions
 - ✅ Hide their wallet identity on-chain
 - ✅ Prove KYC/AML/Yield compliance without revealing details
@@ -20,7 +20,7 @@ User Wallet (0xABC...) → Protocol → Public on blockchain
 ❌ Everyone sees: sender, amount, strategy, compliance status
 ```
 
-**MantleAudit:**
+**BlackBox:**
 ```
 User (hidden) → Backend API → Curator Wallet → Vault → Protocol
 ✅ On-chain shows: Only curator wallet
@@ -353,7 +353,7 @@ User 0xc65e... ← NOWHERE TO BE FOUND! ✅
 ```
 Full Privacy:        [User Hidden] ─────────────────────┐
                                                           │
-Selective Disclosure: [PAC Proves Compliance]            │  MantleAudit
+Selective Disclosure: [PAC Proves Compliance]            │  BlackBox
                                                           │
 Public Metadata:     [Amount, Recipient, Time] ──────────┘
 

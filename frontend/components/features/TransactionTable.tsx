@@ -63,18 +63,18 @@ export function TransactionTable({ transactions, loading = false, onSelectTx }: 
                         <th className="text-left py-3 px-4 text-xs uppercase tracking-wider text-[#9BA4AE] font-medium">
                             TX ID
                         </th>
-                        <th className="text-left py-3 px-4 text-xs uppercase tracking-wider text-[#9BA4AE] font-medium">
+                        {/* <th className="text-left py-3 px-4 text-xs uppercase tracking-wider text-[#9BA4AE] font-medium">
                             Type
-                        </th>
+                        </th> */}
                         <th className="text-left py-3 px-4 text-xs uppercase tracking-wider text-[#9BA4AE] font-medium">
                             Status
                         </th>
                         <th className="text-left py-3 px-4 text-xs uppercase tracking-wider text-[#9BA4AE] font-medium">
                             Time
                         </th>
-                        <th className="text-left py-3 px-4 text-xs uppercase tracking-wider text-[#9BA4AE] font-medium">
+                        {/* <th className="text-left py-3 px-4 text-xs uppercase tracking-wider text-[#9BA4AE] font-medium">
                             Action
-                        </th>
+                        </th> */}
                     </tr>
                 </thead>
                 <tbody>
@@ -112,7 +112,7 @@ export function TransactionTable({ transactions, loading = false, onSelectTx }: 
                                     )}
                                 </div>
                             </td>
-                            <td className="py-4 px-4">
+                            {/* <td className="py-4 px-4">
                                 {tx.type && (
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${tx.type === 'Deposit' ? 'bg-emerald-500/10 text-emerald-400' :
                                         tx.type === 'Withdraw' ? 'bg-rose-500/10 text-rose-400' :
@@ -123,14 +123,14 @@ export function TransactionTable({ transactions, loading = false, onSelectTx }: 
                                         {tx.type}
                                     </span>
                                 )}
-                            </td>
+                            </td> */}
                             <td className="py-4 px-4">
-                                <StatusPill status={tx.status} />
+                                <StatusPill status="Success" />
                             </td>
                             <td className="py-4 px-4 text-sm text-[#9BA4AE]">
                                 {tx.timestamp}
                             </td>
-                            <td className="py-4 px-4">
+                            {/* <td className="py-4 px-4">
                                 {tx.hasProofs || tx.isVaultTx ? (
                                     <button
                                         onClick={(e) => {
@@ -152,7 +152,7 @@ export function TransactionTable({ transactions, loading = false, onSelectTx }: 
                                         Explorer <ExternalLink className="w-3 h-3" />
                                     </a>
                                 )}
-                            </td>
+                            </td> */}
                         </motion.tr>
                     ))}
                 </tbody>

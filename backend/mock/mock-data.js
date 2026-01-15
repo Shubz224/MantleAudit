@@ -1,5 +1,5 @@
 /**
- * Mock Data for MantleAudit Demo
+ * Mock Data for BlackBox Demo
  * Includes KYC credentials, sanctioned addresses, and sample transactions
  */
 

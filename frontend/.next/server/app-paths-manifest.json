@@ -1,7 +1,8 @@
 {
-  "/page": "app/page.js",
-  "/auditor/page": "app/auditor/page.js",
-  "/user/page": "app/user/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
   "/deposit/page": "app/deposit/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/auditor/page": "app/auditor/page.js",
+  "/page": "app/page.js",
+  "/vault/page": "app/vault/page.js",
+  "/user/page": "app/user/page.js"
 }

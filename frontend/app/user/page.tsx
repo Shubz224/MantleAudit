@@ -16,7 +16,10 @@ import {
     Check,
     AlertCircle,
     Shield,
-    Copy
+    Copy,
+    ArrowDownUp,
+    TrendingUp,
+    TrendingDown
 } from 'lucide-react';
 import { useWalletStatus } from '../../hooks/useWallet';
 import { ConnectButton } from '../../components/wallet/ConnectButton';
@@ -28,14 +31,32 @@ const VAULT_ABI = [
     "function executePrivateTransfer(address token, address to, uint256 amount, bytes32 pac) returns (bytes32)"
 ];
 
+// RWA Token List
+const RWA_TOKENS = [
+    { id: 'rwa-real-estate', name: 'Real Estate Token', symbol: 'RET', price: 125.50, change: 2.3 },
+    { id: 'rwa-treasury', name: 'US Treasury Token', symbol: 'UST', price: 100.25, change: 0.5 },
+    { id: 'rwa-gold', name: 'Tokenized Gold', symbol: 'TGLD', price: 1850.75, change: -1.2 },
+    { id: 'rwa-carbon', name: 'Carbon Credits', symbol: 'CCR', price: 45.80, change: 5.7 },
+];
+
 export default function UserTradePage() {
     const { address, isConnected } = useWalletStatus();
 
     // UI State
-    const [tradeType, setTradeType] = useState<'swap' | 'send'>('send');
+    const [tradeType, setTradeType] = useState<'swap' | 'send' | 'rwa'>('send');
     const [selectedToken, setSelectedToken] = useState(TOKENS.MNT);
     const [amount, setAmount] = useState('');
     const [recipient, setRecipient] = useState('');
+
+    // Swap State
+    const [swapFromToken, setSwapFromToken] = useState(TOKENS.MNT);
+    const [swapToToken, setSwapToToken] = useState(TOKENS.USDT);
+    const [swapAmount, setSwapAmount] = useState('');
+
+    // RWA State
+    const [selectedRWA, setSelectedRWA] = useState(RWA_TOKENS[0]);
+    const [rwaAmount, setRwaAmount] = useState('');
+    const [rwaAction, setRwaAction] = useState<'buy' | 'sell'>('buy');
 
     // Balance & Transaction State
     const [vaultBalance, setVaultBalance] = useState('0');
@@ -207,9 +228,47 @@ export default function UserTradePage() {
         }
     };
 
+    const handleSwap = async () => {
+        if (!isConnected || !address) {
+            alert('Please connect your wallet first');
+            return;
+        }
+
+        if (!swapAmount) {
+            alert('Please enter swap amount');
+            return;
+        }
+
+        alert(`Swap ${swapAmount} ${swapFromToken === TOKENS.MNT ? 'MNT' : swapFromToken === TOKENS.USDT ? 'USDT' : 'METH'} to ${swapToToken === TOKENS.MNT ? 'MNT' : swapToToken === TOKENS.USDT ? 'USDT' : 'METH'}`);
+    };
+
+    const handleRWATrade = async () => {
+        if (!isConnected || !address) {
+            alert('Please connect your wallet first');
+            return;
+        }
+
+        if (!rwaAmount) {
+            alert('Please enter amount');
+            return;
+        }
+
+        alert(`${rwaAction === 'buy' ? 'Buy' : 'Sell'} ${rwaAmount} ${selectedRWA.symbol} at $${selectedRWA.price}`);
+    };
+
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text);
         alert('Copied to clipboard!');
+    };
+
+    // Get available tokens for swap (excluding the selected one)
+    const getAvailableSwapTokens = (excludeToken: string) => {
+        const allTokens = [
+            { value: TOKENS.MNT, label: 'MNT (Native Mantle)' },
+            { value: TOKENS.USDT, label: 'Mock USDT' },
+            { value: TOKENS.METH, label: 'Mock METH' }
+        ];
+        return allTokens.filter(token => token.value !== excludeToken);
     };
 
     return (
@@ -266,15 +325,27 @@ export default function UserTradePage() {
                                     ? 'bg-[#6ED6C9] text-[#0B0E11]'
                                     : 'bg-[#161B22] text-[#9BA4AE] hover:text-[#E6EDF3]'
                                     }`}
-                                disabled
                             >
                                 <div className="flex items-center justify-center gap-2">
                                     <ArrowRightLeft className="w-4 h-4" />
-                                    <span>Swap (Coming Soon)</span>
+                                    <span>Swap</span>
+                                </div>
+                            </button>
+                            <button
+                                onClick={() => setTradeType('rwa')}
+                                className={`flex-1 py-3 px-4 rounded-xl font-medium transition-all ${tradeType === 'rwa'
+                                    ? 'bg-[#6ED6C9] text-[#0B0E11]'
+                                    : 'bg-[#161B22] text-[#9BA4AE] hover:text-[#E6EDF3]'
+                                    }`}
+                            >
+                                <div className="flex items-center justify-center gap-2">
+                                    <TrendingUp className="w-4 h-4" />
+                                    <span>RWA Tokens</span>
                                 </div>
                             </button>
                         </div>
 
+                        {/* SEND SECTION */}
                         {tradeType === 'send' && (
                             <div>
                                 {isProcessing ? (
@@ -363,6 +434,184 @@ export default function UserTradePage() {
                                         </Button>
                                     </div>
                                 )}
+                            </div>
+                        )}
+
+                        {/* SWAP SECTION */}
+                        {tradeType === 'swap' && (
+                            <div className="space-y-6">
+                                {/* From Token */}
+                                <div>
+                                    <label className="block text-xs font-medium text-[#9BA4AE] uppercase mb-2">
+                                        From
+                                    </label>
+                                    <div className="bg-[#0B0E11] border border-white/[0.06] rounded-xl p-4">
+                                        <div className="flex items-center justify-between mb-3">
+                                            <select
+                                                value={swapFromToken}
+                                                onChange={(e) => {
+                                                    const newToken = e.target.value;
+                                                    setSwapFromToken(newToken);
+                                                    // If the new from token is the same as to token, swap them
+                                                    if (newToken === swapToToken) {
+                                                        setSwapToToken(swapFromToken);
+                                                    }
+                                                }}
+                                                className="bg-[#161B22] border border-white/[0.06] rounded-lg px-3 py-2 text-[#E6EDF3] focus:outline-none focus:border-[#6ED6C9] transition-colors"
+                                            >
+                                                <option value={TOKENS.MNT}>MNT (Native Mantle)</option>
+                                                <option value={TOKENS.USDT}>Mock USDT</option>
+                                                <option value={TOKENS.METH}>Mock METH</option>
+                                            </select>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            value={swapAmount}
+                                            onChange={(e) => setSwapAmount(e.target.value)}
+                                            placeholder="0.0"
+                                            className="w-full bg-transparent text-2xl text-[#E6EDF3] focus:outline-none"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Swap Direction Icon */}
+                                <div className="flex justify-center">
+                                    <div className="bg-[#161B22] border border-white/[0.06] rounded-xl p-2">
+                                        <ArrowDownUp className="w-5 h-5 text-[#6ED6C9]" />
+                                    </div>
+                                </div>
+
+                                {/* To Token */}
+                                <div>
+                                    <label className="block text-xs font-medium text-[#9BA4AE] uppercase mb-2">
+                                        To
+                                    </label>
+                                    <div className="bg-[#0B0E11] border border-white/[0.06] rounded-xl p-4">
+                                        <div className="flex items-center justify-between mb-3">
+                                            <select
+                                                value={swapToToken}
+                                                onChange={(e) => {
+                                                    const newToken = e.target.value;
+                                                    setSwapToToken(newToken);
+                                                    // If the new to token is the same as from token, swap them
+                                                    if (newToken === swapFromToken) {
+                                                        setSwapFromToken(swapToToken);
+                                                    }
+                                                }}
+                                                className="bg-[#161B22] border border-white/[0.06] rounded-lg px-3 py-2 text-[#E6EDF3] focus:outline-none focus:border-[#6ED6C9] transition-colors"
+                                            >
+                                                {getAvailableSwapTokens(swapFromToken).map(token => (
+                                                    <option key={token.value} value={token.value}>{token.label}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="text-2xl text-[#E6EDF3]">
+                                            {swapAmount ? (parseFloat(swapAmount) * 0.98).toFixed(4) : '0.0'}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Swap Button */}
+                                <Button
+                                    onClick={handleSwap}
+                                    disabled={!isConnected || !swapAmount}
+                                    className="w-full"
+                                    size="lg"
+                                >
+                                    Swap
+                                    <ArrowRightLeft className="w-4 h-4" />
+                                </Button>
+                            </div>
+                        )}
+
+                        {/* RWA SECTION */}
+                        {tradeType === 'rwa' && (
+                            <div className="space-y-6">
+                                {/* RWA Token List */}
+                                <div>
+                                    <label className="block text-xs font-medium text-[#9BA4AE] uppercase mb-3">
+                                        Select RWA Token
+                                    </label>
+                                    <div className="space-y-2">
+                                        {RWA_TOKENS.map((token) => (
+                                            <button
+                                                key={token.id}
+                                                onClick={() => setSelectedRWA(token)}
+                                                className={`w-full bg-[#0B0E11] border rounded-xl p-4 text-left transition-all ${selectedRWA.id === token.id
+                                                        ? 'border-[#6ED6C9] bg-[#6ED6C9]/5'
+                                                        : 'border-white/[0.06] hover:border-white/[0.12]'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm font-medium text-[#E6EDF3]">{token.name}</p>
+                                                        <p className="text-xs text-[#9BA4AE] mt-1">{token.symbol}</p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-sm font-semibold text-[#E6EDF3]">${token.price.toFixed(2)}</p>
+                                                        <p className={`text-xs mt-1 flex items-center gap-1 justify-end ${token.change >= 0 ? 'text-[#6ED6C9]' : 'text-red-400'
+                                                            }`}>
+                                                            {token.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                                                            {Math.abs(token.change)}%
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Buy/Sell Toggle */}
+                                <div className="flex items-center gap-3">
+                                    <button
+                                        onClick={() => setRwaAction('buy')}
+                                        className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${rwaAction === 'buy'
+                                                ? 'bg-[#6ED6C9] text-[#0B0E11]'
+                                                : 'bg-[#161B22] text-[#9BA4AE]'
+                                            }`}
+                                    >
+                                        Buy
+                                    </button>
+                                    <button
+                                        onClick={() => setRwaAction('sell')}
+                                        className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${rwaAction === 'sell'
+                                                ? 'bg-red-500 text-white'
+                                                : 'bg-[#161B22] text-[#9BA4AE]'
+                                            }`}
+                                    >
+                                        Sell
+                                    </button>
+                                </div>
+
+                                {/* Amount Input */}
+                                <div>
+                                    <label className="block text-xs font-medium text-[#9BA4AE] uppercase mb-2">
+                                        Amount
+                                    </label>
+                                    <input
+                                        type="number"
+                                        value={rwaAmount}
+                                        onChange={(e) => setRwaAmount(e.target.value)}
+                                        placeholder="0.0"
+                                        className="w-full bg-[#0B0E11] border border-white/[0.06] rounded-xl px-4 py-3 text-[#E6EDF3] focus:outline-none focus:border-[#6ED6C9] transition-colors"
+                                    />
+                                    {rwaAmount && (
+                                        <p className="text-xs text-[#9BA4AE] mt-2">
+                                            Total: ${(parseFloat(rwaAmount) * selectedRWA.price).toFixed(2)}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Trade Button */}
+                                <Button
+                                    onClick={handleRWATrade}
+                                    disabled={!isConnected || !rwaAmount}
+                                    className={`w-full ${rwaAction === 'sell' ? 'bg-red-500 hover:bg-red-600' : ''}`}
+                                    size="lg"
+                                >
+                                    {rwaAction === 'buy' ? 'Buy' : 'Sell'} {selectedRWA.symbol}
+                                    <ArrowRight className="w-4 h-4" />
+                                </Button>
                             </div>
                         )}
                     </Card>

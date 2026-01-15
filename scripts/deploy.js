@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 async function main() {
-    console.log("🚀 Deploying MantleAudit contracts to Mantle Sepolia...\n");
+    console.log("🚀 Deploying BlackBox contracts to Mantle Sepolia...\n");
 
     // Get deployer account
     const [deployer] = await hre.ethers.getSigners();

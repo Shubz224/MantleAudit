@@ -12,10 +12,10 @@ const config = createConfig(
             [mantleSepolia.id]: http(),
         },
         walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '',
-        appName: 'MantleAudit',
+        appName: 'BlackBox',
         appDescription: 'Privacy-preserving compliance and audit system',
-        appUrl: 'https://mantleaudit.xyz',
-        appIcon: 'https://mantleaudit.xyz/logo.png',
+        appUrl: 'https://BlackBox.xyz',
+        appIcon: 'https://BlackBox.xyz/logo.png',
     })
 );
 

@@ -1,7 +1,7 @@
 import { type Address } from 'viem';
 
 export const EIP712_DOMAIN = {
-    name: 'MantleAudit',
+    name: 'BlackBox',
     version: '1',
     chainId: 5003,
 } as const;

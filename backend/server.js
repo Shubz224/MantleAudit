@@ -23,7 +23,7 @@ app.use('/api/vault', vaultRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
-    res.json({ status: 'ok', message: 'MantleAudit Backend API' });
+    res.json({ status: 'ok', message: 'BlackBox Backend API' });
 });
 
 // Error handling
@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 MantleAudit Backend running on port ${PORT}`);
+    console.log(`🚀 BlackBox Backend running on port ${PORT}`);
     console.log(`📡 API available at http://localhost:${PORT}`);
 });
 

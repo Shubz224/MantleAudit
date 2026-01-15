@@ -130,7 +130,7 @@ export default function VaultDashboard() {
 
                     {/* AUM and Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <Card className="md:col-span-2 bg-gradient-to-br from-[#161B22] to-[#0B0E11] border-[#6ED6C9]/20">
+                        <Card className="md:col-span-3 bg-gradient-to-br border-[#6ED6C9]/20">
                             <div className="flex items-start justify-between">
                                 <div>
                                     <div className="flex items-center gap-2 mb-2">
@@ -163,7 +163,7 @@ export default function VaultDashboard() {
                                 </div>
                             </div>
                         </Card>
-
+                        {/* 
                         <Card className="bg-[#0B0E11]">
                             <div className="flex items-center gap-3 mb-2">
                                 <Users className="w-5 h-5 text-[#9BA4AE]" />
@@ -171,7 +171,7 @@ export default function VaultDashboard() {
                             </div>
                             <h4 className="text-3xl font-bold text-[#E6EDF3]">-</h4>
                             <p className="text-xs text-[#6B7280] mt-1">Active participants</p>
-                        </Card>
+                        </Card> */}
                     </div>
 
                     {/* Curator Info */}

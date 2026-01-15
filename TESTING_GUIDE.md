@@ -21,7 +21,7 @@ npm run dev
 ```
 
 **Expected output:**
-- Backend: `🚀 MantleAudit Backend running on port 3000`
+- Backend: `🚀 BlackBox Backend running on port 3000`
 - Frontend: `ready - started server on 0.0.0.0:3001`
 
 ---

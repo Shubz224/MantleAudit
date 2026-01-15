@@ -4,7 +4,7 @@ pragma solidity ^0.8.23;
 /**
  * @title AuditRegistry
  * @notice Stores cryptographic commitments of private transactions without revealing details
- * @dev Privacy-preserving transaction registry for MantleAudit system
+ * @dev Privacy-preserving transaction registry for BlackBox system
  */
 contract AuditRegistry {
     /// @notice Structure representing a private transaction commitment

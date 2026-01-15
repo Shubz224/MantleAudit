@@ -8,7 +8,7 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 const MENU_ITEMS = [
     { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
     { icon: FileText, label: 'User Dashboard', href: '/user' },
-    { icon: Vault, label: 'Curator Dashboard', href: '/curator' },
+    { icon: Vault, label: 'Vault', href: '/vault' },
     { icon: Coins, label: 'Vault Deposits', href: '/deposit' },
     { icon: Search, label: 'Auditor', href: '/auditor' },
 ];

@@ -1,4 +1,4 @@
-// File: /home/shubz/mantle/frontend/app/user/page.tsx
+// File: /Users/stev3raj/Documents/main/crypto/MantleAudit/frontend/app/user/page.tsx
 import * as entry from '../../../../app/user/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
