@@ -84,8 +84,13 @@ export function TransactionTable({ transactions, loading = false, onSelectTx }: 
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: index * 0.02, duration: 0.15 }}
-                            onClick={() => onSelectTx?.(tx)}
-                            className={`border-b border-white/[0.04] hover:bg-white/[0.02] cursor-pointer transition-all duration-150 ${tx.isVaultTx ? 'bg-[#6ED6C9]/5' : ''
+                            onClick={() => {
+                                // Only open panel for vault transactions with proofs
+                                if (tx.hasProofs || tx.isVaultTx) {
+                                    onSelectTx?.(tx);
+                                }
+                            }}
+                            className={`border-b border-white/[0.04] ${tx.hasProofs || tx.isVaultTx ? 'hover:bg-white/[0.02] cursor-pointer' : ''} transition-all duration-150 ${tx.isVaultTx ? 'bg-[#6ED6C9]/5' : ''
                                 }`}
                         >
                             <td className="py-4 px-4">
@@ -110,10 +115,10 @@ export function TransactionTable({ transactions, loading = false, onSelectTx }: 
                             <td className="py-4 px-4">
                                 {tx.type && (
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${tx.type === 'Deposit' ? 'bg-emerald-500/10 text-emerald-400' :
-                                            tx.type === 'Withdraw' ? 'bg-rose-500/10 text-rose-400' :
-                                                tx.type === 'Private Transfer' ? 'bg-blue-500/10 text-blue-400' :
-                                                    tx.type === 'Private Swap' ? 'bg-purple-500/10 text-purple-400' :
-                                                        'bg-gray-500/10 text-gray-400'
+                                        tx.type === 'Withdraw' ? 'bg-rose-500/10 text-rose-400' :
+                                            tx.type === 'Private Transfer' ? 'bg-blue-500/10 text-blue-400' :
+                                                tx.type === 'Private Swap' ? 'bg-purple-500/10 text-purple-400' :
+                                                    'bg-gray-500/10 text-gray-400'
                                         }`}>
                                         {tx.type}
                                     </span>
@@ -126,15 +131,22 @@ export function TransactionTable({ transactions, loading = false, onSelectTx }: 
                                 {tx.timestamp}
                             </td>
                             <td className="py-4 px-4">
-                                {tx.hasProofs ? (
-                                    <button className="text-[#6ED6C9] hover:text-[#5AC2B5] text-sm font-medium flex items-center gap-1 transition-colors">
-                                        View Proofs <ExternalLink className="w-3 h-3" />
+                                {tx.hasProofs || tx.isVaultTx ? (
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onSelectTx?.(tx);
+                                        }}
+                                        className="text-[#6ED6C9] hover:text-[#5AC2B5] text-sm font-medium flex items-center gap-1 transition-colors"
+                                    >
+                                        View Proofs
                                     </button>
                                 ) : (
                                     <a
-                                        href={`https://sepolia.mantle.xyz/tx/${tx.id}`}
+                                        href={`https://sepolia.mantle.xyz/tx/${tx.txId || tx.id}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        onClick={(e) => e.stopPropagation()}
                                         className="text-[#9BA4AE] hover:text-[#6ED6C9] text-sm font-medium flex items-center gap-1 transition-colors"
                                     >
                                         Explorer <ExternalLink className="w-3 h-3" />
