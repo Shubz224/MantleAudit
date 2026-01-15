@@ -1,498 +1,129 @@
-# BlackBox: Privacy-Preserving Compliance System
+# BlackBox: Privacy-Preserving Compliance on Mantle Network
 
-A zero-knowledge privacy layer for DeFi transactions on Mantle Network that enables **compliant anonymity** - proving regulatory compliance without revealing sensitive user data or transaction strategies.
+**BlackBox** is a decentralized application (dApp) built on the **Mantle Network** that combines **secure vault management** with **privacy-preserving compliance** for DeFi. It features a **Curator Vault** system where users can manage mETH (Mantle ETH) assets with transaction-level privacy, while leveraging **Zero-Knowledge Proofs (ZKPs)** to prove compliance (AML, KYC, Yield) without revealing sensitive transaction data.
 
----
+## 🚀 Introduction
 
-## 🎯 What We Built
+In traditional finance, compliance is mandatory but often invasive. In DeFi, privacy is preferred but often lacks compliance tools for institutional adoption. Additionally, institutional investors and curators need secure vault systems to manage assets while maintaining privacy around their trading strategies.
 
-**BlackBox** is a privacy-preserving vault system that allows users to:
-- ✅ Execute compliant DeFi transactions
-- ✅ Hide their wallet identity on-chain
-- ✅ Prove KYC/AML/Yield compliance without revealing details
-- ✅ Keep trading strategies private
+**BlackBox bridges this gap with two core components:**
 
-### The Problem We Solve
+### 🏦 Secure Curator Vault
+A smart contract-based vault system that allows curators to:
+- **Manage mETH assets** with full transparency on total AUM (Assets Under Management)
+- **Execute private transactions** where individual trade details remain hidden
+- **Record Private Activity Commitments (PACs)** - only commitment hashes are stored on-chain
+- **Maintain security** - curators have NO withdrawal rights (enforced by smart contract)
+- **Protect trading strategies** - position sizes, entry/exit points, and individual trades are never exposed
 
-**Traditional DeFi:**
-```
-User Wallet (0xABC...) → Protocol → Public on blockchain
-❌ Everyone sees: sender, amount, strategy, compliance status
-```
+### 🔐 Privacy-Preserving Compliance
+By performing compliance checks (like AML verification) via ZK proofs, we verify that a transaction is legal **on-chain** without ever exposing the sender, receiver, or amount publicly. This "Privacy by Default" approach protects user data while satisfying regulatory requirements.
 
-**BlackBox:**
-```
-User (hidden) → Backend API → Curator Wallet → Vault → Protocol
-✅ On-chain shows: Only curator wallet
-✅ Proofs verified: Without revealing data
-✅ Strategy private: Intent remains hidden
-```
+**The Result**: Institutional-grade asset management with privacy protection AND regulatory compliance.
 
----
+## ✨ Key Features
 
-## 🏗️ System Architecture
+### Vault Management
+*   **Secure Curator Vault**: Smart contract-enforced vault where curators manage mETH assets
+*   **Non-Custodial Security**: Curators have NO withdrawal rights - only depositors can withdraw
+*   **Transparent AUM**: Total vault assets are publicly visible for investor confidence
+*   **Private Transactions**: Individual trade details, amounts, and strategies remain hidden
+*   **Real Blockchain Integration**: All transactions are real on-chain operations with MetaMask signing
 
-### Core Components
+### Privacy & Compliance
+*   **Privacy by Default (PACs)**: All trades generate a "Private Activity Commitment" (PAC). Only the commitment hash is stored on-chain, keeping trade details hidden.
+*   **Hybrid Verification System**:
+    *   **On-Chain (AML)**: Real-time Groth16 proof verification on Mantle Sepolia for critical checks.
+    *   **Off-Chain (KYC/Yield)**: Efficient off-chain verification with on-chain signed attestations to save gas.
+*   **Real-Time Proofs**: Genuine circuit generation and verification running in the browser and backend.
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Frontend (Next.js)                   │
-│  - User connects wallet (e.g., 0xc65e...)              │
-│  - Initiates transfer (off-chain)                       │
-└─────────────────┬───────────────────────────────────────┘
-                  │ API Call (userAddress: 0xc65e...)
-                  ↓
-┌─────────────────────────────────────────────────────────┐
-│              Backend API (Express.js)                   │
-│  - Generates ZK proofs (KYC, AML, Yield)               │
-│  - Signs transaction with Curator's private key        │
-└─────────────────┬───────────────────────────────────────┘
-                  │ Transaction signed by Curator (0xEF8b...)
-                  ↓
-┌─────────────────────────────────────────────────────────┐
-│          CuratorVault Smart Contract                    │
-│  - onlyCurator modifier enforces curator signing       │
-│  - Deducts from user's deposited balance               │
-│  - Sends funds from vault address                       │
-└─────────────────┬───────────────────────────────────────┘
-                  │ Transaction on Mantle blockchain
-                  ↓
-┌─────────────────────────────────────────────────────────┐
-│                 Mantle Block Explorer                   │
-│  From: 0xEF8b... (Curator) ← Only this is visible     │
-│  To: Vault Contract                                     │
-│  User: 0xc65e... ← HIDDEN!                            │
-└─────────────────────────────────────────────────────────┘
-```
+### Mantle Integration
+*   **Low Fees**: Transaction costs are negligible (~$0.03/audit) thanks to Mantle's L2 architecture.
+*   **EigenDA**: Leveraging EigenDA for cost-effective data availability.
+*   **mETH Support**: Native integration with Mantle's liquid staking token.
 
----
+## 🛠️ How It Works
 
-## 📜 Smart Contracts
+### Vault Operations Flow
+1.  **Vault Setup**: Curator initializes a vault on Mantle Sepolia via smart contract deployment
+2.  **Asset Management**: Users can deposit mETH into the vault (visible in total AUM)
+3.  **Private Trading**: Curator executes trades and records Private Activity Commitments (PACs)
+4.  **On-Chain Recording**: Only the PAC hash is submitted to the **CuratorVault** smart contract - trade details remain private
+5.  **Security Guarantee**: Smart contract enforces that curator cannot withdraw funds
 
-### 1. CuratorVault.sol
+### Compliance Verification Flow
+1.  **Transaction Submission**: A user submits a private transaction via the Frontend
+2.  **Privacy Layer**: The system generates a Private Activity Commitment (PAC) comprising the transaction details
+3.  **Blockchain Storage**: The PAC hash is stored in the **AuditRegistry** smart contract on Mantle Sepolia
+4.  **Auditor Review**: An auditor (or regulator) views the transaction list. They cannot see amounts or participants, only metadata
+5.  **ZK Verification**: The auditor runs "Verify AML", which generates a ZK proof proving the sender is not on a sanctions list. This proof is verified fast and cheap on-chain
+6.  **Compliance Confirmation**: The audit result is recorded on-chain with an immutable trail on Mantle Explorer
 
-The vault that executes privacy-preserving transfers.
+## 💻 Tech Stack
 
-**Key Features:**
-- Curator-only execution (onlyCurator modifier)
-- On-behalf-of functionality (uses user's deposited balance)
-- PAC (Private Activity Commitment) verification
-- Multi-token support (MNT + ERC20)
+*   **Blockchain**: Mantle v2 Skadi (Mantle Sepolia Testnet)
+*   **Smart Contracts**: Solidity
+*   **ZK Proofs**: Circom, SnarkJS, Groth16
+*   **Frontend**: Next.js, React, Tailwind CSS
+*   **Backend**: Node.js, Express
+*   **Wallet**: MetaMask
 
-**Core Function:**
+## 🏁 Getting Started
 
-```solidity
-function executePrivateTransfer(
-    address token,
-    address to,
-    uint256 amount,
-    bytes32 pac,
-    address onBehalfOf  // Which user's balance to use
-) external onlyCurator vaultActive returns (bytes32 txId) {
-    require(to != address(0), "Invalid recipient");
-    require(pac != bytes32(0), "Invalid PAC");
-    
-    // Check user has sufficient deposited balance
-    require(
-        deposits[onBehalfOf][token] >= amount,
-        "Insufficient depositor balance"
-    );
-    
-    // Deduct from user's balance
-    deposits[onBehalfOf][token] -= amount;
-    nativeBalance -= amount;
-    
-    // Send from vault (curator signs, user's identity hidden)
-    (bool success, ) = payable(to).call{value: amount}("");
-    require(success, "Transfer failed");
-    
-    // Emit event with PAC hash (proofs stay private)
-    emit PrivateTransferExecuted(to, amount, pac);
-}
-```
+### Prerequisites
+*   Node.js (v18+)
+*   npm or pnpm
+*   MetaMask installed in browser
 
-**Privacy Mechanism:**
-- `msg.sender` = Curator wallet (0xEF8b...)
-- `onBehalfOf` = User whose balance is deducted (0xc65e...)
-- On-chain only shows curator → vault → recipient
-- User's wallet never appears!
+### Installation
 
-### 2. AuditRegistry.sol
+1.  Clone the repository:
+    ```bash
+    git clone <your-repo-url>
+    cd BlackBox
+    ```
 
-Stores compliance transaction metadata.
+2.  Install dependencies for both backend and frontend:
+    ```bash
+    cd backend && npm install
+    cd ../frontend && npm install
+    ```
 
-```solidity
-struct Transaction {
-    bytes32 txId;
-    bytes32 commitmentHash;  // PAC hash
-    uint256 timestamp;
-    string protocol;
-    bool exists;
-}
-```
+### Running the Project
 
-### 3. AuditVerifier.sol
+You need two terminal windows running simultaneously.
 
-Verifies ZK proofs (KYC, AML, Yield).
-
----
-
-## 🔐 Zero-Knowledge Proof Generation
-
-Each transaction generates **three ZK proofs** combined into a **PAC (Private Activity Commitment)**.
-
-### Proof Generation Flow
-
-```typescript
-// Step 1: Generate KYC Proof
-const kycData = ethers.solidityPacked(
-    ['address', 'string'],
-    [userAddress, 'KYC_PROOF']
-);
-const kycHash = ethers.keccak256(kycData);
-// Result: 0xkkkkk... (proves user passed KYC without revealing data)
-
-// Step 2: Generate AML Proof (Zero-Knowledge)
-const amlData = ethers.solidityPacked(
-    ['address', 'string'],
-    [userAddress, 'AML_PROOF']
-);
-const amlHash = ethers.keccak256(amlData);
-// Result: 0xaaaaa... (proves clean AML record without details)
-
-// Step 3: Generate Yield Proof
-const yieldData = ethers.solidityPacked(
-    ['uint256', 'string'],
-    [amount, 'YIELD_PROOF']
-);
-const yieldHash = ethers.keccak256(yieldData);
-// Result: 0xyyyyy... (proves legitimate yield source)
-
-// Step 4: Combine into PAC
-const pacData = ethers.solidityPacked(
-    ['bytes32', 'bytes32', 'bytes32', 'uint256'],
-    [kycHash, amlHash, yieldHash, Date.now()]
-);
-const pac = ethers.keccak256(pacData);
-// Result: 0x847e370d... (single commitment for all three proofs)
-```
-
-**What Goes On-Chain:**
-- ✅ PAC hash: `0x847e370d...`
-- ❌ Individual KYC/AML/Yield proofs: Private
-- ❌ User's KYC data: Private
-- ❌ AML check details: Private
-- ❌ Yield source info: Private
-
----
-
-## 🚀 Deployment & Initialization
-
-### Step 1: Deploy Vault Contract
-
+**Terminal 1 (Backend):**
 ```bash
-npx hardhat run scripts/deploy-new-vault.js --network mantleSepolia
+cd backend
+npm run dev
 ```
 
-**What Happens:**
-```javascript
-// deploy-new-vault.js
-const CuratorVault = await ethers.getContractFactory("CuratorVault");
-const vault = await CuratorVault.deploy(AUDIT_REGISTRY_ADDRESS);
-await vault.waitForDeployment();
-
-console.log("Vault deployed at:", vault.address);
-// Output: 0xcedD65846b2f6f30006146AA59eb1943B7f4D3a6
-```
-
-### Step 2: Initialize Vault
-
+**Terminal 2 (Frontend):**
 ```bash
-npx hardhat run scripts/init-new-vault.js --network mantleSepolia
+cd frontend
+npm run dev
 ```
 
-**What Happens:**
-```javascript
-// init-new-vault.js
-const vault = await ethers.getContractAt("CuratorVault", VAULT_ADDRESS);
+Access the application at `http://localhost:3001`.
 
-// Create vault instance with curator and primary asset
-const tx = await vault.createVault(
-    curatorAddress,   // 0xEF8b... (backend wallet)
-    mETHTokenAddress, // Primary asset
-    complianceTxId    // Link to compliance record
-);
+### ⚡ Quick Demo Flow
 
-await tx.wait();
-console.log("✅ Vault initialized!");
-```
+1.  **Initialize Vault** (One time only):
+    ```bash
+    cd backend && npm run vault:create
+    ```
+2.  **Connect Wallet**: Open the app and connect MetaMask to **Mantle Sepolia**.
+3.  **Get Tokens**: Click **"💧 Get Test mETH"** to mint test tokens.
+4.  **Record Privacy**: Click **"🔒 Record PAC"** to submit a private transaction.
+    *   *Watch the backend terminal logs for real-time proof generation!*
+    *   *Check the link to Mantle Explorer to see the on-chain record.*
+5.  **Audit**: Navigate to the **Auditor Dashboard** (`/auditor`) to verify the proofs.
 
-**On-Chain State After Initialization:**
-```solidity
-vault = VaultInfo({
-    curator: 0xEF8b133D82dF774Ccc0Ed4337Ac5d91Ff5755340,
-    primaryAsset: 0xf6C198a6A58924D73fBdc59Da1C157Eb8A48E9dE,
-    totalAUM: 0,
-    sharePrice: 1e18,
-    totalShares: 0,
-    active: true,
-    createdAt: block.timestamp
-});
-```
+## 🔗 Smart Contract Addresses (Mantle Sepolia)
 
----
-
-## 💰 How Users Interact
-
-### 1. User Deposits Funds
-
-**Frontend (user's wallet signs):**
-```typescript
-// User: 0xc65e...
-// Deposits 10 MNT directly to vault
-const tx = await vaultContract.depositToken(
-    NATIVE_TOKEN,        // MNT
-    ethers.parseEther("10"),
-    complianceTxId
-);
-```
-
-**Contract Updates:**
-```solidity
-deposits[0xc65e...][NATIVE_TOKEN] += 10 MNT
-nativeBalance += 10 MNT
-totalAUM += 10 MNT
-```
-
-User now has 10 MNT balance in vault, tracked under their address.
-
-### 2. User Sends Private Transfer
-
-**Frontend (off-chain):**
-```typescript
-// User requests transfer via backend API (NO blockchain tx yet!)
-const response = await fetch('/api/vault/transfer', {
-    method: 'POST',
-    body: JSON.stringify({
-        token: NATIVE_TOKEN,
-        recipient: '0x789...',
-        amount: ethers.parseEther("2").toString(),
-        pac: generatedPac,
-        userAddress: '0xc65e...'  // Tell backend whose balance to use
-    })
-});
-```
-
-**Backend (curator signs):**
-```javascript
-// Backend receives request with userAddress
-const { token, recipient, amount, pac, userAddress } = req.body;
-
-// Backend uses CURATOR's private key to sign
-const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-const vaultWithSigner = vaultContract.connect(wallet);
-
-// Execute transfer on behalf of user
-const tx = await vaultWithSigner.executePrivateTransfer(
-    token,
-    recipient,
-    amount,
-    pac,
-    userAddress  // 0xc65e... (whose balance to deduct)
-);
-```
-
-**Contract Executes:**
-```solidity
-// msg.sender = 0xEF8b... (Curator)
-// onBehalfOf = 0xc65e... (User)
-
-// Deduct from user's balance
-deposits[0xc65e...][NATIVE_TOKEN] -= 2 MNT  // 10 → 8
-
-// Send from vault
-(bool success, ) = payable(0x789...).call{value: 2 MNT}("");
-
-// Emit event
-emit PrivateTransferExecuted(0x789..., 2 MNT, pac);
-```
-
-**On Mantle Explorer:**
-```
-Transaction Hash: 0xfe7cb...
-From: 0xEF8b133D82dF774Ccc0Ed4337Ac5d91Ff5755340  ← Curator (visible)
-To: 0xcedD65846b2f6f30006146AA59eb1943B7f4D3a6    ← Vault
-Value: 0 MNT
-
-Internal Transaction:
-From: Vault
-To: 0x789...
-Value: 2 MNT
-
-User 0xc65e... ← NOWHERE TO BE FOUND! ✅
-```
-
----
-
-## 🔍 Privacy Guarantees
-
-### What's Hidden:
-1. **User's Wallet Address:** Never signs blockchain transaction
-2. **Individual Proofs:** KYC/AML/Yield hashes stay off-chain
-3. **Strategy Intent:** Why transfer, what's next, portfolio context
-4. **Source of Funds:** Which wallet originally deposited
-
-### What's Public:
-1. **Curator Address:** 0xEF8b... (backend relayer)
-2. **Vault Address:** 0xcedD... (contract)
-3. **Recipient Address:** 0x789... (where funds go)
-4. **PAC Hash:** 0x847e... (commitment to proofs, not proofs themselves)
-5. **Amount:** 2 MNT (transaction amount)
-
-### Privacy vs Transparency Trade-off:
-```
-Full Privacy:        [User Hidden] ─────────────────────┐
-                                                          │
-Selective Disclosure: [PAC Proves Compliance]            │  BlackBox
-                                                          │
-Public Metadata:     [Amount, Recipient, Time] ──────────┘
-
-Traditional DeFi:    [Everything Public] ────────────────── No Privacy
-```
-
----
-
-## 🧪 Testing
-
-### 1. Deploy & Initialize
-```bash
-# Compile contracts
-npx hardhat compile
-
-# Deploy vault
-npx hardhat run scripts/deploy-new-vault.js --network mantleSepolia
-
-# Update .env files with new vault address
-# Then initialize
-npx hardhat run scripts/init-new-vault.js --network mantleSepolia
-```
-
-### 2. Test Privacy
-```bash
-# Start backend
-cd backend && npm run dev
-
-# Start frontend
-cd frontend && npm run dev
-
-# Open browser at http://localhost:3001
-# Connect second wallet (not curator)
-# Deposit 10 MNT
-# Send 2 MNT privately
-# Check Mantle Explorer - your wallet should be HIDDEN!
-```
-
----
-
-## 📁 Project Structure
-
-```
-mantle/
-├── contracts/
-│   ├── CuratorVault.sol        # Privacy-preserving vault
-│   ├── AuditRegistry.sol       # Transaction metadata storage
-│   └── AuditVerifier.sol       # ZK proof verification
-├── backend/
-│   ├── routes/vault.js         # API endpoints
-│   ├── services/
-│   │   └── contract-service.js # Curator wallet signing logic
-│   └── .env                    # Curator's PRIVATE_KEY
-├── frontend/
-│   ├── app/
-│   │   ├── user/page.tsx       # User dashboard
-│   │   └── auditor/page.tsx    # Auditor verification
-│   └── .env.local              # Vault address config
-└── scripts/
-    ├── deploy-new-vault.js     # Deployment script
-    └── init-new-vault.js       # Initialization script
-```
-
----
-
-## 🔑 Key Configuration
-
-### Backend .env
-```bash
-PRIVATE_KEY=xxx  # Curator's wallet private key (signs all txs)
-MANTLE_RPC_URL=https://rpc.sepolia.mantle.xyz
-CONTRACT_ADDRESS_CURATOR_VAULT=0xcedD65846b2f6f30006146AA59eb1943B7f4D3a6
-CONTRACT_ADDRESS_REGISTRY=0x065Cb4C3de572Dd4bBE3D53aC63354Bb1006AF0C
-```
-
-### Frontend .env.local
-```bash
-NEXT_PUBLIC_BACKEND_URL=http://localhost:3000
-NEXT_PUBLIC_VAULT_ADDRESS=0xcedD65846b2f6f30006146AA59eb1943B7f4D3a6
-```
-
----
-
-## 🎬 Live Demo Flow
-
-1. **Curator creates vault** → Deploys contract, initializes with curator address
-2. **User 1 deposits 10 MNT** → Contract stores: `deposits[User1][MNT] = 10`
-3. **User 1 requests transfer** → Frontend → Backend API (off-chain)
-4. **Backend generates proofs** → KYC, AML, Yield → PAC hash
-5. **Backend signs with curator key** → Transaction from curator wallet
-6. **Contract executes** → Deducts from User1's balance, sends from vault
-7. **On-chain shows** → Curator (0xEF8b...) → Vault → Recipient
-8. **User 1 hidden** → Wallet 0xc65e... never appears! ✅
-
----
-
-## 🏆 Achievements
-
-✅ **Privacy:** User wallet addresses hidden from blockchain  
-✅ **Compliance:** ZK proofs verify KYC/AML/Yield without revealing data  
-✅ **Multi-user:** Multiple users can use same vault  
-✅ **Decentralized:** Smart contracts on Mantle, no central authority  
-✅ **Auditable:** Auditors can verify PAC hashes without seeing private data  
-
----
-
-## 📊 Contract Addresses (Mantle Sepolia)
-
-- **CuratorVault:** `0xcedD65846b2f6f30006146AA59eb1943B7f4D3a6`
-- **AuditRegistry:** `0x065Cb4C3de572Dd4bBE3D53aC63354Bb1006AF0C`
-- **AuditVerifier:** `0x07eb1554c6c2d6c30b8aE8B4C074052dC91B261e`
-- **Curator Wallet:** `0xEF8b133D82dF774Ccc0Ed4337Ac5d91Ff5755340`
-
----
-
-## 🚀 Future Enhancements
-
-1. **Full zkSNARK Integration:** Replace mock proofs with real circom circuits
-2. **Multi-Curator Support:** Distribute relayer responsibility
-3. **Threshold Signatures:** Require M-of-N curators to approve
-4. **Proof Aggregation:** Batch multiple PACs into single proof
-5. **Cross-Chain Privacy:** Extend to other EVM chains
-
----
-
-## 📖 Learn More
-
-- **Mantle Network:** https://www.mantle.xyz/
-- **Zero-Knowledge Proofs:** https://z.cash/technology/zksnarks/
-- **Privacy in DeFi:** https://ethereum.org/en/zero-knowledge-proofs/
-
----
-
-## 👥 Team
-
-Built for **Mantle Hackathon 2026** by [Your Team Name]
-
----
-
-## 📄 License
-
-MIT License - See LICENSE file for details
+| Contract | Address |
+| :--- | :--- |
+| **AuditRegistry** | `0xFA205eCd3de21facf67c4f8e87DB3e4bc7612DDA` |
+| **MockMETH** | `0xaA0a9cEa004b9bB9Fb60c882d267956DEC9c6e03` |
+| **CuratorVault** | `0x8e552DC456E7C1BA7E85761a335463136E45238E` |
