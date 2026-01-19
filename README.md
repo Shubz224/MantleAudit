@@ -10,7 +10,6 @@
 
 *Enabling institutional-grade privacy while maintaining regulatory compliance through zero-knowledge cryptography on Mantle's modular L2*
 
-[Live Demo](#) • [Documentation](#architecture) • [Smart Contracts](#deployed-contracts)
 
 </div>
 
@@ -31,6 +30,13 @@
 ---
 
 ## 🎯 The Problem
+
+![Problem](main.png)
+
+
+
+
+
 
 ### The DeFi Privacy Paradox
 
@@ -104,6 +110,9 @@ User (hidden) → Backend API → Curator Signs → Vault → ✅ On-chain: Only
 ---
 
 ## 🏗️ Architecture
+
+
+![Pac](pac.png)
 
 ### System Overview
 
